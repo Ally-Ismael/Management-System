@@ -7,7 +7,7 @@ use App\Lib\Helpers\AuthHelper;
 use App\Lib\Helpers\CsrfHelper;
 use App\Lib\Helpers\SessionHelper;
 use App\Models\User;
-use App\Config\ALLOW_SELF_REGISTRATION;
+use const App\Config\ALLOW_SELF_REGISTRATION;
 
 class AuthController extends BaseController {
     public function indexAction(): void { $this->loginAction(); }

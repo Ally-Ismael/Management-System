@@ -8,7 +8,7 @@ use App\Lib\Helpers\CsrfHelper;
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Management-System</title>
-  <link rel="stylesheet" href="<?= BASE_URL ?>application/assets/css/styles.css">
+  <link rel="stylesheet" href="<?= BASE_URL ?>css/styles.css">
 </head>
 <body>
   <header class="topbar">
@@ -35,6 +35,6 @@ use App\Lib\Helpers\CsrfHelper;
   <main class="container">
     <?= $content ?>
   </main>
-  <script src="<?= BASE_URL ?>application/assets/js/app.js"></script>
+  <script src="<?= BASE_URL ?>js/app.js"></script>
 </body>
 </html>
