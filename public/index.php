@@ -21,8 +21,19 @@ spl_autoload_register(function ($class) use ($appPath) {
     if (strpos($class, $prefix) !== 0) return;
     $relative = str_replace('App\\', '', $class);
     $relative = str_replace('\\', '/', $relative);
-    $file = $appPath . '/' . $relative . '.php';
-    if (is_file($file)) require_once $file;
+    $parts = explode('/', $relative);
+    $fileBase = array_pop($parts);
+    $dirOriginal = implode('/', $parts);
+    $dirLower = strtolower($dirOriginal);
+    $candidates = [
+        $appPath . '/' . $dirOriginal . '/' . $fileBase . '.php',
+        $appPath . '/' . $dirLower . '/' . $fileBase . '.php',
+        $appPath . '/' . $dirLower . '/' . strtolower($fileBase) . '.php',
+        $appPath . '/' . $dirOriginal . '/' . strtolower($fileBase) . '.php',
+    ];
+    foreach ($candidates as $file) {
+        if (is_file($file)) { require_once $file; return; }
+    }
 });
 
 use App\Controllers\AuthController;
