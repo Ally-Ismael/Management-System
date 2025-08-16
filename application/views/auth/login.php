@@ -5,16 +5,18 @@ use App\Lib\Helpers\CsrfHelper;
 <?php if (!empty($error)): ?><div class="alert error"><?= htmlspecialchars($error) ?></div><?php endif; ?>
 <form method="post">
   <?= CsrfHelper::inputField() ?>
-  <div>
-    <label>Email</label>
-    <input type="email" name="email" required>
-  </div>
-  <div>
-    <label>Password</label>
-    <input type="password" name="password" required>
+  <div class="row">
+    <div>
+      <label>Email</label>
+      <input name="email" type="email" required>
+    </div>
+    <div>
+      <label>Password</label>
+      <input name="password" type="password" required>
+    </div>
   </div>
   <button class="primary" type="submit">Login</button>
 </form>
-<p>
+<?php if (!empty($allowRegister)): ?>
   <a href="/index.php?r=auth/register">Create an account</a>
-</p>
+<?php endif; ?>

@@ -7,6 +7,7 @@ use App\Lib\Helpers\AuthHelper;
 use App\Lib\Helpers\CsrfHelper;
 use App\Models\Employee;
 use App\Models\Attendance;
+use App\Models\ActivityLog;
 
 class AttendanceController extends BaseController {
     public function indexAction(): void {
@@ -20,11 +21,11 @@ class AttendanceController extends BaseController {
                 $num = trim($_POST['employee_number'] ?? '');
                 $name = trim($_POST['full_name'] ?? '');
                 $dept = trim($_POST['department'] ?? '');
-                if ($num && $name && $dept) { $employeeModel->create($num, $name, $dept); $msg = 'Employee added.'; }
+                if ($num && $name && $dept) { $employeeModel->create($num, $name, $dept); $msg = 'Employee added.'; (new ActivityLog())->log((int)($_SESSION['user']['id'] ?? 0), 'create_employee', 'employee', null, $num); }
             } else {
                 $empId = (int)($_POST['employee_id'] ?? 0);
                 $status = $_POST['status'] ?? 'in';
-                if ($empId > 0 && in_array($status, ['in','out'], true)) { $attendanceModel->log($empId, $status); $msg = 'Attendance logged.'; }
+                if ($empId > 0 && in_array($status, ['in','out'], true)) { $attendanceModel->log($empId, $status); $msg = 'Attendance logged.'; (new ActivityLog())->log((int)($_SESSION['user']['id'] ?? 0), 'attendance', 'attendance', $empId, $status); }
             }
         }
         $page = max(1, (int)($_GET['page'] ?? 1));

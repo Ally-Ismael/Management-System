@@ -7,6 +7,7 @@ use App\Lib\Helpers\AuthHelper;
 use App\Lib\Helpers\CsrfHelper;
 use App\Lib\Helpers\SessionHelper;
 use App\Models\User;
+use App\Models\ActivityLog;
 use const App\Config\ALLOW_SELF_REGISTRATION;
 
 class AuthController extends BaseController {
@@ -35,9 +36,11 @@ class AuthController extends BaseController {
                         'email' => $user['email'],
                         'role' => $user['role'],
                     ];
+                    (new ActivityLog())->log((int)$user['id'], 'login', 'user', (int)$user['id'], null);
                     header('Location: /index.php?r=dashboard/index');
                     return;
                 } else {
+                    (new ActivityLog())->log(null, 'login_failed', 'user', null, $email);
                     $error = 'Invalid credentials.';
                 }
             }
@@ -73,8 +76,10 @@ class AuthController extends BaseController {
                 $role = $userModel->countUsers() === 0 ? 'admin' : 'user';
                 try {
                     $userId = $userModel->create($name, $email, $hash, $role);
+                    (new ActivityLog())->log((int)$userId, 'register', 'user', (int)$userId, null);
                     $success = 'Registration successful. You can now login.';
                 } catch (\Throwable $e) {
+                    (new ActivityLog())->log(null, 'register_failed', 'user', null, $email);
                     $error = 'Registration failed. Email may already be in use.';
                 }
             }
@@ -85,6 +90,7 @@ class AuthController extends BaseController {
     public function logoutAction(): void {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             CsrfHelper::validateOrFail();
+            (new ActivityLog())->log((int)($_SESSION['user']['id'] ?? 0), 'logout', 'user', (int)($_SESSION['user']['id'] ?? 0), null);
             $_SESSION = [];
             if (ini_get('session.use_cookies')) {
                 $params = session_get_cookie_params();

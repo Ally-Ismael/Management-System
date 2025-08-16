@@ -41,6 +41,8 @@ use App\Controllers\AssetController;
 use App\Controllers\ScanController;
 use App\Controllers\ReportController;
 use App\Controllers\AttendanceController;
+use App\Controllers\UsersController;
+use App\Controllers\DriversController;
 
 $route = $_GET['r'] ?? '';
 
@@ -59,6 +61,8 @@ $controllerMap = [
     'reports' => ReportController::class,
     'attendance' => AttendanceController::class,
     'dashboard' => AuthController::class, // dashboard in AuthController for simplicity
+    'users' => UsersController::class,
+    'drivers' => DriversController::class,
 ];
 
 $controllerClass = $controllerMap[$controllerId] ?? null;
