@@ -384,11 +384,38 @@
             <div class="form-header" style="display: flex; align-items: center; gap: 15px;">
                 <img src="assets/Namwater Logo_page-0001.jpg" alt="Namwater Logo" style="height: 50px; object-fit: contain;">
                 <div>
-                    <h2>Select Form Type</h2>
-                    <p>Choose the appropriate form for your request</p>
+                    <h2>Select a Category</h2>
+                    <p>Choose between IT Forms and SAP Forms</p>
                 </div>
             </div>
             
+            <div class="user-selection">
+                <div class="user-card" onclick="showCategory('it')">
+                    <div class="icon">🖥️</div>
+                    <h3>IT Forms</h3>
+                    <p>IT user application and change management procedure</p>
+                    <button class="btn btn-primary">Open</button>
+                </div>
+                
+                <div class="user-card" onclick="showCategory('sap')">
+                    <div class="icon">📦</div>
+                    <h3>SAP Forms</h3>
+                    <p>SAP authorization, new user, and change request</p>
+                    <button class="btn btn-primary">Open</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- IT Forms Selection -->
+        <div id="itSelection" class="form-container">
+            <div class="form-header" style="display: flex; align-items: center; gap: 15px;">
+                <img src="assets/Namwater Logo_page-0001.jpg" alt="Namwater Logo" style="height: 50px; object-fit: contain;">
+                <div>
+                    <h2>IT Forms</h2>
+                    <p>Select an IT form to continue</p>
+                </div>
+            </div>
+
             <div class="user-selection">
                 <div class="user-card" onclick="showForm('itUser')">
                     <div class="icon">💻</div>
@@ -396,20 +423,101 @@
                     <p>Request for new IT user setup with hardware and software</p>
                     <button class="btn btn-primary">Select</button>
                 </div>
-                
+
+                <div class="user-card" onclick="showForm('changeProcedure')">
+                    <div class="icon">📄</div>
+                    <h3>Change Management Request Form Procedure</h3>
+                    <p>View the official procedure document</p>
+                    <button class="btn btn-primary">Open</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SAP Forms Selection -->
+        <div id="sapSelection" class="form-container">
+            <div class="form-header" style="display: flex; align-items: center; gap: 15px;">
+                <img src="assets/Namwater Logo_page-0001.jpg" alt="Namwater Logo" style="height: 50px; object-fit: contain;">
+                <div>
+                    <h2>SAP Forms</h2>
+                    <p>Select a SAP form to continue</p>
+                </div>
+            </div>
+
+            <div class="user-selection">
                 <div class="user-card" onclick="showForm('sapAuth')">
                     <div class="icon">🔐</div>
-                    <h3>SAP Authorization</h3>
+                    <h3>SAP User Authorization Request</h3>
                     <p>Request for SAP system authorization and access</p>
                     <button class="btn btn-primary">Select</button>
                 </div>
-                
+
                 <div class="user-card" onclick="showForm('sapNew')">
                     <div class="icon">👤</div>
-                    <h3>SAP New User</h3>
+                    <h3>SAP New User Application</h3>
                     <p>Application for new SAP user account</p>
                     <button class="btn btn-primary">Select</button>
                 </div>
+
+                <div class="user-card" onclick="showForm('sapChange')">
+                    <div class="icon">📝</div>
+                    <h3>SAP Change request form</h3>
+                    <p>View and download the SAP change request form</p>
+                    <button class="btn btn-primary">Open</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Change Management Request Form Procedure (PDF Viewer) -->
+        <div id="changeProcedureForm" class="form-container">
+            <div class="form-header" style="display: flex; align-items: center; gap: 15px;">
+                <img src="assets/Namwater Logo_page-0001.jpg" alt="Namwater Logo" style="height: 50px; object-fit: contain;">
+                <div>
+                    <h2>Change Management Request Form Procedure</h2>
+                    <p>Procedure document (PDF)</p>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <object data="/Change%20Management%20Request%20Form%20Procedure.pdf" type="application/pdf" width="100%" height="800">
+                    <p>Your browser can't display PDFs. 
+                       <a href="/Change%20Management%20Request%20Form%20Procedure.pdf" target="_blank" rel="noopener">Open the PDF</a>.
+                    </p>
+                </object>
+                <div style="margin-top: 10px;">
+                    <a class="btn btn-primary" href="/Change%20Management%20Request%20Form%20Procedure.pdf" target="_blank" rel="noopener">Open in New Tab</a>
+                    <a class="btn btn-secondary" href="/Change%20Management%20Request%20Form%20Procedure.pdf" download>Download PDF</a>
+                </div>
+            </div>
+
+            <div class="form-navigation">
+                <button type="button" class="btn btn-secondary" onclick="goBack()">← Back</button>
+            </div>
+        </div>
+
+        <!-- SAP Change Request Form (PDF Viewer) -->
+        <div id="sapChangeForm" class="form-container">
+            <div class="form-header" style="display: flex; align-items: center; gap: 15px;">
+                <img src="assets/Namwater Logo_page-0001.jpg" alt="Namwater Logo" style="height: 50px; object-fit: contain;">
+                <div>
+                    <h2>SAP Change request form</h2>
+                    <p>Official SAP change request form (PDF)</p>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <object data="/Report/SAP%20Change%20request%20form.pdf" type="application/pdf" width="100%" height="800">
+                    <p>Your browser can't display PDFs. 
+                       <a href="/Report/SAP%20Change%20request%20form.pdf" target="_blank" rel="noopener">Open the PDF</a>.
+                    </p>
+                </object>
+                <div style="margin-top: 10px;">
+                    <a class="btn btn-primary" href="/Report/SAP%20Change%20request%20form.pdf" target="_blank" rel="noopener">Open in New Tab</a>
+                    <a class="btn btn-secondary" href="/Report/SAP%20Change%20request%20form.pdf" download>Download PDF</a>
+                </div>
+            </div>
+
+            <div class="form-navigation">
+                <button type="button" class="btn btn-secondary" onclick="goBack()">← Back</button>
             </div>
         </div>
         
@@ -1109,6 +1217,7 @@
     <script>
         let currentUserType = '';
         let currentForm = '';
+        let currentCategory = '';
         let formHistory = [];
         
         // Navigation functions
@@ -1116,9 +1225,7 @@
             currentUserType = type;
             formHistory.push('welcome');
             
-            // Hide supervisor field for external users
             if (type === 'external') {
-                document.getElementById('formSelection').style.display = 'none';
                 showExternalForm();
             } else {
                 document.getElementById('welcomeScreen').style.display = 'none';
@@ -1126,10 +1233,25 @@
                 document.querySelector('.back-btn').classList.remove('hidden');
             }
         }
+
+        function showCategory(category) {
+            currentCategory = category;
+            formHistory.push('category');
+
+            document.querySelectorAll('.form-container').forEach(form => {
+                form.classList.remove('active');
+            });
+
+            if (category === 'it') {
+                document.getElementById('itSelection').classList.add('active');
+            } else {
+                document.getElementById('sapSelection').classList.add('active');
+            }
+        }
         
         function showForm(formType) {
             currentForm = formType;
-            formHistory.push('selection');
+            formHistory.push('subSelection');
             
             // Hide all forms
             document.querySelectorAll('.form-container').forEach(form => {
@@ -1147,7 +1269,7 @@
         }
         
         function showExternalForm() {
-            formHistory.push('selection');
+            formHistory.push('welcome');
             document.getElementById('welcomeScreen').style.display = 'none';
             document.getElementById('externalUserForm').classList.add('active');
             document.querySelector('.back-btn').classList.remove('hidden');
@@ -1175,14 +1297,42 @@
                 document.querySelector('.back-btn').classList.add('hidden');
                 currentUserType = '';
                 currentForm = '';
-            } else if (lastPage === 'selection' || (lastPage === 'welcome' && currentUserType === 'internal')) {
-                // Back to form selection
+                currentCategory = '';
+                return;
+            }
+
+            if (lastPage === 'subSelection') {
+                // Back to category's sub-selection
+                document.querySelectorAll('.form-container').forEach(form => {
+                    form.classList.remove('active');
+                });
+                if (currentCategory === 'it') {
+                    document.getElementById('itSelection').classList.add('active');
+                } else if (currentCategory === 'sap') {
+                    document.getElementById('sapSelection').classList.add('active');
+                }
+                return;
+            }
+            
+            if (lastPage === 'category' || (lastPage === 'welcome' && currentUserType === 'internal')) {
+                // Back to main category selection
                 document.querySelectorAll('.form-container').forEach(form => {
                     form.classList.remove('active');
                 });
                 document.getElementById('formSelection').classList.add('active');
                 currentForm = '';
+                return;
             }
+
+            // Fallback: go to welcome
+            document.querySelectorAll('.form-container').forEach(form => {
+                form.classList.remove('active');
+            });
+            document.getElementById('welcomeScreen').style.display = 'block';
+            document.querySelector('.back-btn').classList.add('hidden');
+            currentUserType = '';
+            currentForm = '';
+            currentCategory = '';
         }
         
         function startOver() {
@@ -1201,6 +1351,7 @@
             // Reset variables
             currentUserType = '';
             currentForm = '';
+            currentCategory = '';
             formHistory = [];
         }
         
