@@ -1,3 +1,24 @@
 {
+<<<<<<< HEAD
     "liveServer.settings.port": 5501
+=======
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default",
+                "enableSsl": "Disabled"
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 3306,
+            "driver": "MariaDB",
+            "name": "Namwater",
+            "database": "iyaloo",
+            "username": "root",
+            "connectionTimeout": 30,
+            "password": ""
+        }
+    ],
+    "git.ignoreLimitWarning": true
+>>>>>>> dd2f1eb2ed56fd9288993f14bf21600daf482f65
 }

@@ -1,0 +1,130 @@
+* { margin: 0px; padding: 0px; }
+body {
+        font-size: 120%;
+        background: #F8F8FF;
+  padding: 20px;
+}
+.header {
+	width: 30%;
+	margin: 40px auto 0px;
+	color: white;
+	background: #154360;
+	text-align: center;
+	border: 1px solid #B0C4DE;
+	border-bottom: none;
+	border-radius: 10px 10px 0px 0px;
+	padding: 20px;
+}
+
+form, .content {
+        width: 30%;
+        margin: 0px auto;
+        padding: 20px;
+        border: 1px solid #B0C4DE;
+        background: white;
+        border-radius: 0px 0px 10px 10px;
+}
+.input-group {
+        margin: 10px 0px 10px 0px;
+}
+.input-group label {
+        display: block;
+        text-align: left;
+        margin: 3px;
+}
+.input-group input {
+        height: 30px;
+        width: 93%;
+        padding: 5px 10px;
+        font-size: 16px;
+        border-radius: 5px;
+        border: 1px solid gray;
+
+}
+label{
+  display: inline-block;
+}
+#user_type {
+        height: 40px;
+        width: 98%;
+        padding: 5px 10px;
+        background: white;
+        font-size: 16px;
+        border-radius: 5px;
+        border: 1px solid gray;
+}
+.btn {
+        padding: 10px;
+        font-size: 15px;
+        color: white;
+        background: #154360;
+        border: none;
+        border-radius: 5px;
+}
+.error {
+        width: 92%; 
+        margin: 0px auto; 
+        padding: 10px; 
+        border: 1px solid #a94442; 
+        color: #a94442; 
+        background: #f2dede; 
+        border-radius: 5px; 
+        text-align: left;
+}
+.success {
+        color: #3c763d; 
+        background: #dff0d8; 
+        border: 1px solid #3c763d;
+        margin-bottom: 20px;
+}
+.profile_info img {
+        display: inline-block; 
+        width: 50px; 
+        height: 50px; 
+        margin: 5px;
+        float: left;
+}
+.profile_info div {
+        display: inline-block; 
+        margin: 5px;
+}
+.profile_info:after {
+        content: "";
+        display: block;
+        clear: both;
+}
+.notification {
+    position: fixed;
+    top: 20px; /* Adjust this value to set the distance from the top */
+    right: 20px; /* Adjust this value to set the distance from the right */
+    background-color: #4CAF50; /* Green background color */
+    color: white; /* Text color */
+    padding: 15px; /* Padding around the content */
+    border-radius: 5px; /* Rounded corners */
+    display: none; /* Hide by default */
+}
+
+.show {
+    display: block; /* Show when the notification is active */
+}
+.links-container {
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+  position: absolute;
+  top: 80px;
+  right: 0;
+  width: 200px;
+  height: 100px;
+  border: 3px solid #73AD21;
+}
+
+.links-container a {
+    margin-bottom: 20px; /* Adjust the space between links */
+    text-decoration: none;
+    color: #333; /* Adjust link color */
+}
+
+.links-container a:hover {
+    text-decoration: underline;
+}
