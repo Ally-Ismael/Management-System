@@ -1,0 +1,1383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NAMWATER SAP Authorization System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Core Sans AR', 'Rubik', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #333F96 0%, #4BC0B2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Welcome Screen */
+        .welcome-screen {
+            text-align: center;
+            padding: 60px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .welcome-screen h1 {
+            font-size: 3rem;
+            color: white;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .welcome-screen p {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 40px;
+        }
+        
+        .user-selection {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .user-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 250px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .user-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .user-card h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+        
+        .user-card p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .user-card .icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+        
+        /* Form Container */
+        .form-container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            display: none;
+        }
+        
+        .form-container.active {
+            display: block;
+        }
+        
+            .form-header {
+            background: linear-gradient(135deg, #333F96 0%, #4BC0B2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .form-header h2 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+        
+        .form-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .form-section h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .form-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .checkbox-item input[type="checkbox"] {
+            width: auto;
+        }
+        
+        /* E-Signature Section */
+        .signature-section {
+            background: #f0f8ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 2px dashed #667eea;
+        }
+        
+        .signature-options {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .signature-option {
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .signature-option input[type="radio"] {
+            margin-right: 10px;
+        }
+        
+        .signature-upload {
+            border: 2px dashed #ccc;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: none;
+        }
+        
+        .signature-upload.active {
+            display: block;
+        }
+        
+        .signature-upload:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+        
+        .signature-upload input[type="file"] {
+            display: none;
+        }
+        
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+        
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #218838;
+        }
+        
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #667eea;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .back-btn:hover {
+            background: white;
+            transform: translateY(-2px);
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .vpn-notice {
+            background: #fff3cd;
+            color: #856404;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #ffc107;
+        }
+        
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #28a745;
+        }
+        
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #dc3545;
+        }
+        
+        .form-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        @media (max-width: 768px) {
+            .welcome-screen h1 {
+                font-size: 2rem;
+            }
+            
+            .user-selection {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .form-row {
+                flex-direction: column;
+            }
+            
+            .signature-options {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Back Button -->
+        <button class="back-btn hidden" onclick="goBack()">← Back to Main Menu</button>
+        
+        <!-- Welcome Screen -->
+        <div id="welcomeScreen" class="welcome-screen">
+            <h1>Welcome to NAMWATER</h1>
+            <p>Digital SAP Authorization System</p>
+            <p>Please select your user type to continue with the authorization process</p>
+            
+            <div class="user-selection">
+                <div class="user-card" onclick="selectUserType('internal')">
+                    <div class="icon">👨‍💼</div>
+                    <h3>Internal Employee</h3>
+                    <p>NAMWATER employees with supervisor approval</p>
+                    <button class="btn btn-primary">Select</button>
+                </div>
+                
+                <div class="user-card" onclick="selectUserType('external')">
+                    <div class="icon">🤝</div>
+                    <h3>External User</h3>
+                    <p>Contractors, partners, and external collaborators</p>
+                    <button class="btn btn-primary">Select</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Form Type Selection -->
+        <div id="formSelection" class="form-container">
+            <div class="form-header" style="display: flex; align-items: center; gap: 15px;">
+                <img src="assets/Namwater Logo_page-0001.jpg" alt="Namwater Logo" style="height: 50px; object-fit: contain;">
+                <div>
+                    <h2>Select Form Type</h2>
+                    <p>Choose the appropriate form for your request</p>
+                </div>
+            </div>
+            
+            <div class="user-selection">
+                <div class="user-card" onclick="showForm('itUser')">
+                    <div class="icon">💻</div>
+                    <h3>IT User Application</h3>
+                    <p>Request for new IT user setup with hardware and software</p>
+                    <button class="btn btn-primary">Select</button>
+                </div>
+                
+                <div class="user-card" onclick="showForm('sapAuth')">
+                    <div class="icon">🔐</div>
+                    <h3>SAP Authorization</h3>
+                    <p>Request for SAP system authorization and access</p>
+                    <button class="btn btn-primary">Select</button>
+                </div>
+                
+                <div class="user-card" onclick="showForm('sapNew')">
+                    <div class="icon">👤</div>
+                    <h3>SAP New User</h3>
+                    <p>Application for new SAP user account</p>
+                    <button class="btn btn-primary">Select</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- IT User Application Form -->
+        <div id="itUserForm" class="form-container">
+            <div class="form-header" style="display: flex; align-items: center; gap: 15px;">
+                <img src="assets/Namwater Logo_page-0001.jpg" alt="Namwater Logo" style="height: 80px; object-fit: contain; margin-left: 10px;">
+                <div>
+                    <h2>IT User Application</h2>
+                    <p>Request for new IT user setup with hardware and software</p>
+                </div>
+            </div>
+            
+            <form id="itUserFormData">
+                <!-- Section A: Origin of Request -->
+                <div class="form-section">
+                    <h3>A. ORIGIN OF REQUEST</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="userCostCentre">User Cost Centre</label>
+                            <input type="text" id="userCostCentre" name="userCostCentre" required>
+                        </div>
+                        <div class="form-group" id="supervisorGroup">
+                            <label for="supervisorName">Supervisor Name</label>
+                            <input type="text" id="supervisorName" name="supervisorName">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="division">Division/Region</label>
+                            <input type="text" id="division" name="division" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="areaSection">Area/Section</label>
+                            <input type="text" id="areaSection" name="areaSection" required>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Section B: Details of New IT User -->
+                <div class="form-section">
+                    <h3>B. DETAILS OF NEW IT USER</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="employeeNo">Employee No / Email</label>
+                            <input type="text" id="employeeNo" name="employeeNo" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="surname">Surname</label>
+                            <input type="text" id="surname" name="surname" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="firstName">First Name</label>
+                            <input type="text" id="firstName" name="firstName" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="position">Position</label>
+                            <input type="text" id="position" name="position" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="extNo">Extension No</label>
+                            <input type="text" id="extNo" name="extNo">
+                        </div>
+                        <div class="form-group">
+                            <label for="location">Location</label>
+                            <input type="text" id="location" name="location" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="department">Department</label>
+                            <input type="text" id="department" name="department" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="cellPhone">Cell Phone</label>
+                            <input type="tel" id="cellPhone" name="cellPhone">
+                        </div>
+                        <div class="form-group">
+                            <label for="company">Company</label>
+                            <input type="text" id="company" name="company">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="motivation">Motivation for Application</label>
+                            <textarea id="motivation" name="motivation" required></textarea>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Section C: Assets to be Assigned -->
+                <div class="form-section">
+                    <h3>C. ASSETS TO BE ASSIGNED TO USER</h3>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="pc" name="assets" value="pc">
+                            <label for="pc">PC / Notebook</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="docking" name="assets" value="docking">
+                            <label for="docking">Docking Station</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="terminal" name="assets" value="terminal">
+                            <label for="terminal">Terminal</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="monitor" name="assets" value="monitor">
+                            <label for="monitor">Screen (Monitor)</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="keyboard" name="assets" value="keyboard">
+                            <label for="keyboard">Keyboard</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="mouse" name="assets" value="mouse">
+                            <label for="mouse">Mouse</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="printer" name="assets" value="printer">
+                            <label for="printer">Printer</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="jetDirect" name="assets" value="jetDirect">
+                            <label for="jetDirect">Jet Direct</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Section D: Software to be Installed -->
+                <div class="form-section">
+                    <h3>D. SOFTWARE TO BE INSTALLED</h3>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="office" name="software" value="office">
+                            <label for="office">Office</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="autocad" name="software" value="autocad">
+                            <label for="autocad">AutoCAD</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="citect" name="software" value="citect">
+                            <label for="citect">Citect</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="sap" name="software" value="sap">
+                            <label for="sap">SAP</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Section E: Access on Public Folder -->
+                <div class="form-section">
+                    <h3>E. ACCESS NEEDED ON PUBLIC FOLDER</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="path1">Folder Path 1</label>
+                            <input type="text" id="path1" name="path1" placeholder="Enter folder path here" required>
+                            <select id="access1" name="access1">
+                                <option value="Read">Read</option>
+                                <option value="Write">Write</option>
+                                <option value="Modify">Modify</option>
+                                <option value="Full">Full</option>
+                            </select>
+                            <br><br>
+
+                            <label for="path2">Folder Path 2</label>
+                            <input type="text" id="path2" name="path2" placeholder="Enter folder path here">
+                            <select id="access2" name="access2">
+                                <option value="Read">Read</option>
+                                <option value="Write">Write</option>
+                                <option value="Modify">Modify</option>
+                                <option value="Full">Full</option>
+                            </select>
+                            <br><br>
+
+                            <label for="path3">Folder Path 3</label>
+                            <input type="text" id="path3" name="path3" placeholder="Enter folder path here">
+                            <select id="access3" name="access3">
+                                <option value="Read">Read</option>
+                                <option value="Write">Write</option>
+                                <option value="Modify">Modify</option>
+                                <option value="Full">Full</option>
+                            </select>
+                            <br><br>
+
+                            <label for="path4">Folder Path 4</label>
+                            <input type="text" id="path4" name="path4" placeholder="Enter folder path here">
+                            <select id="access4" name="access4">
+                                <option value="Read">Read</option>
+                                <option value="Write">Write</option>
+                                <option value="Modify">Modify</option>
+                                <option value="Full">Full</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- E-Signature Section -->
+                <div class="signature-section">
+                    <h3>🖊️ Electronic Signature</h3>
+                    <div class="signature-options">
+                        <div class="signature-option">
+                            <input type="radio" id="adobeSign" name="signatureType" value="adobe" onchange="toggleSignatureMethod()">
+                            <label for="adobeSign">
+                                <strong>Adobe Sign</strong><br>
+                                <small>Secure digital signature with audit trail</small>
+                            </label>
+                        </div>
+                        <div class="signature-option">
+                            <input type="radio" id="uploadSign" name="signatureType" value="upload" onchange="toggleSignatureMethod()">
+                            <label for="uploadSign">
+                                <strong>Upload Signature</strong><br>
+                                <small>Upload your saved signature file</small>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div id="signatureUpload" class="signature-upload">
+                        <input type="file" id="signatureFile" accept=".png,.jpg,.jpeg,.pdf" onchange="handleSignatureUpload(this)">
+                        <div onclick="document.getElementById('signatureFile').click()">
+                            <p>📎 Click to upload signature</p>
+                            <p><small>Supported formats: PNG, JPG, PDF</small></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-navigation">
+                    <button type="button" class="btn btn-secondary" onclick="goBack()">← Back</button>
+                    <button type="submit" class="btn btn-success">Submit Application</button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- SAP Authorization Form -->
+        <div id="sapAuthForm" class="form-container">
+            <div class="form-header" style="display: flex; align-items: center; gap: 15px;">
+                <img src="assets/Namwater Logo_page-0001.jpg" alt="Namwater Logo" style="height: 50px; object-fit: contain;">
+                <div>
+                    <h2>SAP User Authorization Request</h2>
+                    <p>Request for SAP system authorization and access rights</p>
+                </div>
+            </div>
+            
+            <form id="sapAuthFormData">
+                <!-- Section A: Origin of Request -->
+                <div class="form-section">
+                    <h3>A. ORIGIN OF REQUEST</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="authUserCostCentre">User Cost Centre</label>
+                            <input type="text" id="authUserCostCentre" name="userCostCentre" required>
+                        </div>
+                        <div class="form-group" id="authSupervisorGroup">
+                            <label for="authSupervisorName">Supervisor Name</label>
+                            <input type="text" id="authSupervisorName" name="supervisorName">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="authDivision">Division/Region</label>
+                            <input type="text" id="authDivision" name="division" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="authAreaSection">Area/Section</label>
+                            <input type="text" id="authAreaSection" name="areaSection" required>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Section B: Details of SAP User -->
+                <div class="form-section">
+                    <h3>B. DETAILS OF SAP USER</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="authEmployeeNo">Employee No / Email</label>
+                            <input type="text" id="authEmployeeNo" name="employeeNo" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="authName">Name</label>
+                            <input type="text" id="authName" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="authSurname">Surname</label>
+                            <input type="text" id="authSurname" name="surname" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="authPosition">Position</label>
+                            <input type="text" id="authPosition" name="position" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="authPrinter">Printer</label>
+                            <input type="text" id="authPrinter" name="printer">
+                        </div>
+                        <div class="form-group">
+                            <label for="authCellPhone">Cell Phone</label>
+                            <input type="tel" id="authCellPhone" name="cellPhone">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="authCompany">Company</label>
+                            <input type="text" id="authCompany" name="company">
+                        </div>
+                        <div class="form-group">
+                            <label for="authEffectiveFrom">Effective From</label>
+                            <input type="date" id="authEffectiveFrom" name="effectiveFrom" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="authEffectiveTo">Effective To</label>
+                            <input type="date" id="authEffectiveTo" name="effectiveTo" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="authMotivation">Motivation for Authorization Request</label>
+                            <textarea id="authMotivation" name="motivation" required></textarea>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Section C: Authorization Requirement -->
+                <div class="form-section">
+                    <h3>C. AUTHORIZATION REQUIREMENT</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="authAccessCodes">List Required Access / Transaction Codes</label>
+                            <textarea id="authAccessCodes" name="accessCodes" placeholder="Please list all required transaction codes and access permissions" required></textarea>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Section D: Business Suite User Classification -->
+                <div class="form-section">
+                    <h3>D. BUSINESS SUITE USER CLASSIFICATION</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="authUserClass">User Classification</label>
+                            <select id="authUserClass" name="userClass" required>
+                                <option value="">Select Classification</option>
+                                <option value="developer">Developer (N$72,000.00)</option>
+                                <option value="professional">Professional (N$38,400.00)</option>
+                                <option value="limited">Limited Professional (N$15,600.00)</option>
+                                <option value="employee">Employee (N$4,800.00)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- E-Signature Section -->
+                <div class="signature-section">
+                    <h3>🖊️ Electronic Signature</h3>
+                    <div class="signature-options">
+                        <div class="signature-option">
+                            <input type="radio" id="authAdobeSign" name="authSignatureType" value="adobe" onchange="toggleSignatureMethod('auth')">
+                            <label for="authAdobeSign">
+                                <strong>Adobe Sign</strong><br>
+                                <small>Secure digital signature with audit trail</small>
+                            </label>
+                        </div>
+                        <div class="signature-option">
+                            <input type="radio" id="authUploadSign" name="authSignatureType" value="upload" onchange="toggleSignatureMethod('auth')">
+                            <label for="authUploadSign">
+                                <strong>Upload Signature</strong><br>
+                                <small>Upload your saved signature file</small>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div id="authSignatureUpload" class="signature-upload">
+                        <input type="file" id="authSignatureFile" accept=".png,.jpg,.jpeg,.pdf" onchange="handleSignatureUpload(this)">
+                        <div onclick="document.getElementById('authSignatureFile').click()">
+                            <p>📎 Click to upload signature</p>
+                            <p><small>Supported formats: PNG, JPG, PDF</small></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-navigation">
+                    <button type="button" class="btn btn-secondary" onclick="goBack()">← Back</button>
+                    <button type="submit" class="btn btn-success">Submit Authorization Request</button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- SAP New User Form -->
+        <div id="sapNewForm" class="form-container">
+            <div class="form-header" style="display: flex; align-items: center; gap: 15px;">
+                <img src="assets/Namwater Logo_page-0001.jpg" alt="Namwater Logo" style="height: 50px; object-fit: contain;">
+                <div>
+                    <h2>SAP New User Application</h2>
+                    <p>Application for new SAP user account creation</p>
+                </div>
+            </div>
+            
+            <form id="sapNewFormData">
+                <!-- Section A: Origin of Request -->
+                <div class="form-section">
+                    <h3>A. ORIGIN OF REQUEST</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="newUserCostCentre">User Cost Centre</label>
+                            <input type="text" id="newUserCostCentre" name="userCostCentre" required>
+                        </div>
+                        <div class="form-group" id="newSupervisorGroup">
+                            <label for="newSupervisorName">Supervisor Name</label>
+                            <input type="text" id="newSupervisorName" name="supervisorName">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="newDivision">Division/Region</label>
+                            <input type="text" id="newDivision" name="division" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="newAreaSection">Area/Section</label>
+                            <input type="text" id="newAreaSection" name="areaSection" required>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Section B: Details of New SAP User -->
+                <div class="form-section">
+                    <h3>B. DETAILS OF NEW SAP USER</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="newEmployeeNo">Employee No / Email</label>
+                            <input type="text" id="newEmployeeNo" name="employeeNo" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="newName">Name</label>
+                            <input type="text" id="newName" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="newSurname">Surname</label>
+                            <input type="text" id="newSurname" name="surname" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="newPosition">Position</label>
+                            <input type="text" id="newPosition" name="position" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="newPrinter">Printer</label>
+                            <input type="text" id="newPrinter" name="printer">
+                        </div>
+                        <div class="form-group">
+                            <label for="newCellPhone">Cell Phone</label>
+                            <input type="tel" id="newCellPhone" name="cellPhone">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="newCompany">Company</label>
+                            <input type="text" id="newCompany" name="company">
+                        </div>
+                        <div class="form-group">
+                            <label for="newEffectiveFrom">Effective From</label>
+                            <input type="date" id="newEffectiveFrom" name="effectiveFrom" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="newEffectiveTo">Effective To</label>
+                            <input type="date" id="newEffectiveTo" name="effectiveTo" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="newMotivation">Motivation for Application</label>
+                            <textarea id="newMotivation" name="motivation" required></textarea>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Section C: Authorization Requirement -->
+                <div class="form-section">
+                    <h3>C. AUTHORIZATION REQUIREMENT</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="newAccessCodes">List Required Access / Transaction Codes</label>
+                            <textarea id="newAccessCodes" name="accessCodes" placeholder="Please list all required transaction codes and access permissions" required></textarea>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Section D: Business Suite User Classification -->
+                <div class="form-section">
+                    <h3>D. BUSINESS SUITE USER CLASSIFICATION</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="newUserClass">User Classification</label>
+                            <select id="newUserClass" name="userClass" required>
+                                <option value="">Select Classification</option>
+                                <option value="developer">Developer (N$72,000.00)</option>
+                                <option value="professional">Professional (N$38,400.00)</option>
+                                <option value="limited">Limited Professional (N$15,600.00)</option>
+                                <option value="employee">Employee (N$4,800.00)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- E-Signature Section -->
+                <div class="signature-section">
+                    <h3>🖊️ Electronic Signature</h3>
+                    <div class="signature-options">
+                        <div class="signature-option">
+                            <input type="radio" id="newAdobeSign" name="newSignatureType" value="adobe" onchange="toggleSignatureMethod('new')">
+                            <label for="newAdobeSign">
+                                <strong>Adobe Sign</strong><br>
+                                <small>Secure digital signature with audit trail</small>
+                            </label>
+                        </div>
+                        <div class="signature-option">
+                            <input type="radio" id="newUploadSign" name="newSignatureType" value="upload" onchange="toggleSignatureMethod('new')">
+                            <label for="newUploadSign">
+                                <strong>Upload Signature</strong><br>
+                                <small>Upload your saved signature file</small>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div id="newSignatureUpload" class="signature-upload">
+                        <input type="file" id="newSignatureFile" accept=".png,.jpg,.jpeg,.pdf" onchange="handleSignatureUpload(this)">
+                        <div onclick="document.getElementById('newSignatureFile').click()">
+                            <p>📎 Click to upload signature</p>
+                            <p><small>Supported formats: PNG, JPG, PDF</small></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-navigation">
+                    <button type="button" class="btn btn-secondary" onclick="goBack()">← Back</button>
+                    <button type="submit" class="btn btn-success">Submit New User Application</button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- External User Form -->
+        <div id="externalUserForm" class="form-container">
+            <div class="form-header" style="display: flex; align-items: center; gap: 15px;">
+                <img src="assets/Namwater Logo_page-0001.jpg" alt="Namwater Logo" style="height: 50px; object-fit: contain;">
+                <div>
+                    <h2>External User Authorization Form</h2>
+                    <p>VPN Access Request for External Users</p>
+                </div>
+            </div>
+            
+            <div class="vpn-notice">
+                <strong>⚠️ VPN Access Required</strong><br>
+                As an external user, you will need VPN access to connect to NAMWATER systems. This form will be reviewed by Tonata and Katrina for approval.
+            </div>
+            
+            <form id="externalUserFormData">
+                <!-- Section A: Origin of Request -->
+                <div class="form-section">
+                    <h3>A. ORIGIN OF REQUEST</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="extUserCostCentre">User Cost Centre</label>
+                            <input type="text" id="extUserCostCentre" name="userCostCentre" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="extSection">Section</label>
+                            <input type="text" id="extSection" name="section" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="extDivision">Division/Region</label>
+                            <input type="text" id="extDivision" name="division" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="extAreaSection">Area/Section</label>
+                            <input type="text" id="extAreaSection" name="areaSection" required>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Section B: External User Details -->
+                <div class="form-section">
+                    <h3>B. EXTERNAL USER DETAILS</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="extName">Name</label>
+                            <input type="text" id="extName" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="extSurname">Surname</label>
+                            <input type="text" id="extSurname" name="surname" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="extEmail">Email Address</label>
+                            <input type="email" id="extEmail" name="email" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="extCellPhone">Cell Phone Number</label>
+                            <input type="tel" id="extCellPhone" name="cellPhone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="extPosition">Position/Role</label>
+                            <input type="text" id="extPosition" name="position" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="extCompany">Company</label>
+                            <input type="text" id="extCompany" name="company" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="extEffectiveFrom">Effective From</label>
+                            <input type="date" id="extEffectiveFrom" name="effectiveFrom" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="extEffectiveTo">Effective To</label>
+                            <input type="date" id="extEffectiveTo" name="effectiveTo" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="extMotivation">Motivation for Authorization Request</label>
+                            <textarea id="extMotivation" name="motivation" required></textarea>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Section C: Authorization Requirement -->
+                <div class="form-section">
+                    <h3>C. AUTHORIZATION REQUIREMENT</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="extAccessCodes">List Required Access / Transaction Codes</label>
+                            <textarea id="extAccessCodes" name="accessCodes" placeholder="Please list all required transaction codes and access permissions" required></textarea>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- E-Signature Section -->
+                <div class="signature-section">
+                    <h3>🖊️ Electronic Signature</h3>
+                    <div class="signature-options">
+                        <div class="signature-option">
+                            <input type="radio" id="extAdobeSign" name="extSignatureType" value="adobe" onchange="toggleSignatureMethod('ext')">
+                            <label for="extAdobeSign">
+                                <strong>Adobe Sign</strong><br>
+                                <small>Secure digital signature with audit trail</small>
+                            </label>
+                        </div>
+                        <div class="signature-option">
+                            <input type="radio" id="extUploadSign" name="extSignatureType" value="upload" onchange="toggleSignatureMethod('ext')">
+                            <label for="extUploadSign">
+                                <strong>Upload Signature</strong><br>
+                                <small>Upload your saved signature file</small>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div id="extSignatureUpload" class="signature-upload">
+                        <input type="file" id="extSignatureFile" accept=".png,.jpg,.jpeg,.pdf" onchange="handleSignatureUpload(this)">
+                        <div onclick="document.getElementById('extSignatureFile').click()">
+                            <p>📎 Click to upload signature</p>
+                            <p><small>Supported formats: PNG, JPG, PDF</small></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-navigation">
+                    <button type="button" class="btn btn-secondary" onclick="goBack()">← Back</button>
+                    <button type="submit" class="btn btn-success">Submit External User Request</button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Success Message -->
+        <div id="successMessage" class="form-container">
+            <div class="success-message">
+                <h3>✅ Application Submitted Successfully!</h3>
+                <p>Your request has been submitted and will be processed by the relevant department.</p>
+                <p><strong>Request ID:</strong> <span id="requestId"></span></p>
+                <p><strong>Submitted:</strong> <span id="submittedTime"></span></p>
+                <p>You will receive an email confirmation shortly.</p>
+            </div>
+            
+            <div class="form-navigation">
+                <button type="button" class="btn btn-primary" onclick="startOver()">Submit Another Request</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let currentUserType = '';
+        let currentForm = '';
+        let formHistory = [];
+        
+        // Navigation functions
+        function selectUserType(type) {
+            currentUserType = type;
+            formHistory.push('welcome');
+            
+            // Hide supervisor field for external users
+            if (type === 'external') {
+                document.getElementById('formSelection').style.display = 'none';
+                showExternalForm();
+            } else {
+                document.getElementById('welcomeScreen').style.display = 'none';
+                document.getElementById('formSelection').classList.add('active');
+                document.querySelector('.back-btn').classList.remove('hidden');
+            }
+        }
+        
+        function showForm(formType) {
+            currentForm = formType;
+            formHistory.push('selection');
+            
+            // Hide all forms
+            document.querySelectorAll('.form-container').forEach(form => {
+                form.classList.remove('active');
+            });
+            
+            // Show selected form
+            const formId = formType + 'Form';
+            document.getElementById(formId).classList.add('active');
+            
+            // Hide supervisor fields for external users
+            if (currentUserType === 'external') {
+                hideSupervisorFields();
+            }
+        }
+        
+        function showExternalForm() {
+            formHistory.push('selection');
+            document.getElementById('welcomeScreen').style.display = 'none';
+            document.getElementById('externalUserForm').classList.add('active');
+            document.querySelector('.back-btn').classList.remove('hidden');
+        }
+        
+        function hideSupervisorFields() {
+            const supervisorGroups = ['supervisorGroup', 'authSupervisorGroup', 'newSupervisorGroup'];
+            supervisorGroups.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.style.display = 'none';
+                }
+            });
+        }
+        
+        function goBack() {
+            const lastPage = formHistory.pop();
+            
+            if (formHistory.length === 0) {
+                // Back to welcome screen
+                document.querySelectorAll('.form-container').forEach(form => {
+                    form.classList.remove('active');
+                });
+                document.getElementById('welcomeScreen').style.display = 'block';
+                document.querySelector('.back-btn').classList.add('hidden');
+                currentUserType = '';
+                currentForm = '';
+            } else if (lastPage === 'selection' || (lastPage === 'welcome' && currentUserType === 'internal')) {
+                // Back to form selection
+                document.querySelectorAll('.form-container').forEach(form => {
+                    form.classList.remove('active');
+                });
+                document.getElementById('formSelection').classList.add('active');
+                currentForm = '';
+            }
+        }
+        
+        function startOver() {
+            // Reset everything
+            document.querySelectorAll('.form-container').forEach(form => {
+                form.classList.remove('active');
+            });
+            document.getElementById('welcomeScreen').style.display = 'block';
+            document.querySelector('.back-btn').classList.add('hidden');
+            
+            // Clear form data
+            document.querySelectorAll('form').forEach(form => {
+                form.reset();
+            });
+            
+            // Reset variables
+            currentUserType = '';
+            currentForm = '';
+            formHistory = [];
+        }
+        
+        // Signature handling
+        function toggleSignatureMethod(formPrefix = '') {
+            const prefix = formPrefix ? formPrefix : '';
+            const signatureType = document.querySelector(`input[name="${prefix}SignatureType"]:checked`);
+            const uploadDiv = document.getElementById(`${prefix}SignatureUpload`) || document.getElementById('signatureUpload');
+            
+            if (signatureType && uploadDiv) {
+                if (signatureType.value === 'upload') {
+                    uploadDiv.classList.add('active');
+                } else {
+                    uploadDiv.classList.remove('active');
+                }
+            }
+        }
+        
+        // Fix for signature radio buttons not triggering toggle on click of label
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('input[type="radio"][name$="SignatureType"]').forEach(radio => {
+                radio.addEventListener('change', () => {
+                    const formPrefix = radio.name.replace('SignatureType', '');
+                    toggleSignatureMethod(formPrefix);
+                });
+            });
+        });
+        
+        function handleSignatureUpload(input) {
+            const file = input.files[0];
+            if (file) {
+                const fileName = file.name;
+                const fileSize = (file.size / 1024 / 1024).toFixed(2);
+                
+                // Update the upload area to show file info
+                const uploadDiv = input.parentElement.parentElement;
+                uploadDiv.innerHTML = `
+                    <div style="color: #28a745;">
+                        <p>✅ Signature uploaded successfully!</p>
+                        <p><strong>File:</strong> ${fileName} (${fileSize} MB)</p>
+                        <p><small>Click to change signature</small></p>
+                    </div>
+                `;
+                
+                // Re-add the file input
+                const newInput = document.createElement('input');
+                newInput.type = 'file';
+                newInput.id = input.id;
+                newInput.accept = '.png,.jpg,.jpeg,.pdf';
+                newInput.style.display = 'none';
+                newInput.onchange = function() { handleSignatureUpload(this); };
+                uploadDiv.appendChild(newInput);
+                
+                // Make the div clickable again
+                uploadDiv.onclick = function() {
+                    newInput.click();
+                };
+            }
+        }
+        
+        // Form submission handling
+        document.getElementById('itUserFormData').addEventListener('submit', function(e) {
+            e.preventDefault();
+            submitForm('IT User Application');
+        });
+        
+        document.getElementById('sapAuthFormData').addEventListener('submit', function(e) {
+            e.preventDefault();
+            submitForm('SAP Authorization Request');
+        });
+        
+        document.getElementById('sapNewFormData').addEventListener('submit', function(e) {
+            e.preventDefault();
+            submitForm('SAP New User Application');
+        });
+        
+        document.getElementById('externalUserFormData').addEventListener('submit', function(e) {
+            e.preventDefault();
+            submitForm('External User Authorization');
+        });
+        
+        function submitForm(formType) {
+            // Generate request ID
+            const requestId = 'REQ-' + Date.now().toString(36).toUpperCase();
+            
+            // Get current timestamp
+            const now = new Date();
+            const timestamp = now.toLocaleString();
+            
+            // Check if Adobe Sign is selected
+            const signatureInputs = document.querySelectorAll('input[name*="SignatureType"]:checked');
+            let useAdobeSign = false;
+            
+            signatureInputs.forEach(input => {
+                if (input.value === 'adobe') {
+                    useAdobeSign = true;
+                }
+            });
+            
+            if (useAdobeSign) {
+                // Simulate Adobe Sign redirect
+                alert('Redirecting to Adobe Sign for secure signature...');
+                setTimeout(() => {
+                    showSuccess(requestId, timestamp);
+                }, 2000);
+            } else {
+                // Direct submission
+                showSuccess(requestId, timestamp);
+            }
+        }
+        
+        function showSuccess(requestId, timestamp) {
+            // Hide all forms
+            document.querySelectorAll('.form-container').forEach(form => {
+                form.classList.remove('active');
+            });
+            
+            // Show success message
+            document.getElementById('successMessage').classList.add('active');
+            document.getElementById('requestId').textContent = requestId;
+            document.getElementById('submittedTime').textContent = timestamp;
+            
+            // Hide back button
+            document.querySelector('.back-btn').classList.add('hidden');
+        }
+        
+        // Date validation
+        function validateDates() {
+            const fromInputs = document.querySelectorAll('input[name="effectiveFrom"]');
+            const toInputs = document.querySelectorAll('input[name="effectiveTo"]');
+            
+            fromInputs.forEach((fromInput, index) => {
+                const toInput = toInputs[index];
+                if (fromInput && toInput) {
+                    fromInput.addEventListener('change', function() {
+                        toInput.min = this.value;
+                    });
+                    
+                    toInput.addEventListener('change', function() {
+                        if (this.value < fromInput.value) {
+                            alert('End date must be after start date');
+                            this.value = '';
+                        }
+                    });
+                }
+            });
+        }
+        
+        // Auto-save functionality
+        function autoSave() {
+            const formData = {};
+            document.querySelectorAll('input, select, textarea').forEach(input => {
+                if (input.value) {
+                    formData[input.name] = input.value;
+                }
+            });
+            
+            // Save to session storage would go here
+            // sessionStorage.setItem('namwater_form_draft', JSON.stringify(formData));
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            validateDates();
+            
+            // Set up auto-save every 30 seconds
+            setInterval(autoSave, 30000);
+            
+            // Keyboard shortcuts
+            document.addEventListener('keydown', function(e) {
+                if (e.ctrlKey && e.key === 's') {
+                    e.preventDefault();
+                    autoSave();
+                    alert('Form saved as draft');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
