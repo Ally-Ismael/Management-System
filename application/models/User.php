@@ -41,4 +41,43 @@ class User extends BaseModel {
         $row = $res->fetch_assoc();
         return (int)$row['c'];
     }
+
+    public function list(int $page = 1, int $perPage = 25, ?bool $onlyPending = null): array {
+        $offset = ($page - 1) * $perPage;
+        if ($onlyPending === true) {
+            $stmt = $this->db->prepare('SELECT id, name, email, role, verified, created_at FROM users WHERE verified = 0 ORDER BY id DESC LIMIT ? OFFSET ?');
+        } elseif ($onlyPending === false) {
+            $stmt = $this->db->prepare('SELECT id, name, email, role, verified, created_at FROM users WHERE verified = 1 ORDER BY id DESC LIMIT ? OFFSET ?');
+        } else {
+            $stmt = $this->db->prepare('SELECT id, name, email, role, verified, created_at FROM users ORDER BY id DESC LIMIT ? OFFSET ?');
+        }
+        $stmt->bind_param('ii', $perPage, $offset);
+        $stmt->execute();
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function count(?bool $onlyPending = null): int {
+        if ($onlyPending === true) {
+            $res = $this->db->query('SELECT COUNT(*) AS c FROM users WHERE verified = 0');
+        } elseif ($onlyPending === false) {
+            $res = $this->db->query('SELECT COUNT(*) AS c FROM users WHERE verified = 1');
+        } else {
+            $res = $this->db->query('SELECT COUNT(*) AS c FROM users');
+        }
+        $row = $res->fetch_assoc();
+        return (int)$row['c'];
+    }
+
+    public function setVerified(int $id, bool $verified): bool {
+        $v = $verified ? 1 : 0;
+        $stmt = $this->db->prepare('UPDATE users SET verified = ? WHERE id = ?');
+        $stmt->bind_param('ii', $v, $id);
+        return $stmt->execute();
+    }
+
+    public function delete(int $id): bool {
+        $stmt = $this->db->prepare('DELETE FROM users WHERE id = ?');
+        $stmt->bind_param('i', $id);
+        return $stmt->execute();
+    }
 }

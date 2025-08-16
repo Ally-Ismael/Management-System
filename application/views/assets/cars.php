@@ -1,5 +1,6 @@
 <?php
 use App\Lib\Helpers\CsrfHelper;
+use const App\Config\BASE_URL;
 ?>
 <h2>Cars</h2>
 <form method="post">
@@ -26,7 +27,7 @@ use App\Lib\Helpers\CsrfHelper;
 </form>
 
 <table class="table">
-  <thead><tr><th>ID</th><th>Reg</th><th>Make</th><th>Model</th><th>Assigned To</th><th>Created</th></tr></thead>
+  <thead><tr><th>ID</th><th>Reg</th><th>Make</th><th>Model</th><th>Assigned To</th><th>Created</th><th>Actions</th></tr></thead>
   <tbody>
     <?php foreach ($items as $it): ?>
     <tr>
@@ -36,6 +37,13 @@ use App\Lib\Helpers\CsrfHelper;
       <td><?= htmlspecialchars($it['model']) ?></td>
       <td><?= htmlspecialchars((string)$it['assigned_to']) ?></td>
       <td><?= htmlspecialchars($it['created_at']) ?></td>
+      <td class="actions">
+        <form method="post" action="<?= BASE_URL ?>index.php?r=assets/deleteCar" style="display:inline;">
+          <?= CsrfHelper::inputField() ?>
+          <input type="hidden" name="id" value="<?= (int)$it['id'] ?>">
+          <button type="submit" data-confirm="Delete this car?">Delete</button>
+        </form>
+      </td>
     </tr>
     <?php endforeach; ?>
   </tbody>
