@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Asset - Asset Management System</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .form-container {
+            max-width: 600px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Asset Management System</h1>
+            <nav class="nav">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="login.html" class="nav-link">Login</a>
+                <a href="register.html" class="nav-link">Register</a>
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+                <button id="logoutBtn" class="btn btn-danger" style="margin-left: auto;">Logout</button>
+            </nav>
+        </header>
+
+        <main class="main-content">
+            <div class="form-container">
+                <h2 class="form-title">Add New Asset</h2>
+                
+                <form id="addAssetForm">
+                    <div class="form-group">
+                        <label for="assetNumber">Asset Number</label>
+                        <input type="text" id="assetNumber" name="assetNumber" required placeholder="Enter unique asset number">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="assetType">Asset Type</label>
+                        <select id="assetType" name="assetType" required>
+                            <option value="">Select Asset Type</option>
+                            <option value="laptop">Laptop</option>
+                            <option value="desktop">Desktop Computer</option>
+                            <option value="monitor">Monitor</option>
+                            <option value="printer">Printer</option>
+                            <option value="phone">Phone</option>
+                            <option value="tablet">Tablet</option>
+                            <option value="car">Company Car</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea id="description" name="description" rows="3" placeholder="Enter asset description"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="location">Location</label>
+                        <input type="text" id="location" name="location" required placeholder="Enter asset location">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="purchaseDate">Purchase Date</label>
+                        <input type="date" id="purchaseDate" name="purchaseDate">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="assignedTo">Assign To (Optional)</label>
+                        <select id="assignedTo" name="assignedTo">
+                            <option value="">Select User</option>
+                            <!-- Users will be loaded here by JavaScript -->
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Add Asset</button>
+                        <a href="dashboard.html" class="btn btn-secondary">Back to Dashboard</a>
+                    </div>
+                </form>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2024 Asset Management System. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        // Load users for assignment dropdown
+        document.addEventListener('DOMContentLoaded', function() {
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const assignedToSelect = document.getElementById('assignedTo');
+            
+            users.forEach(user => {
+                const option = document.createElement('option');
+                option.value = user.id;
+                option.textContent = `${user.firstname} ${user.surname} (${user.username})`;
+                assignedToSelect.appendChild(option);
+            });
+        });
+    </script>
+</body>
+</html>

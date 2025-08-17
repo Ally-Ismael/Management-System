@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Asset Management System</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #667eea;
+            margin: 0;
+        }
+        .badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .badge.success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .badge.warning {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 0.875rem;
+        }
+        .dashboard-actions {
+            margin-bottom: 2rem;
+        }
+        .welcome-message {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Asset Management System</h1>
+            <nav class="nav">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="login.html" class="nav-link">Login</a>
+                <a href="register.html" class="nav-link">Register</a>
+                <a href="dashboard.html" class="nav-link active">Dashboard</a>
+                <button id="logoutBtn" class="btn btn-danger" style="margin-left: auto;">Logout</button>
+            </nav>
+        </header>
+
+        <main class="main-content">
+            <div id="dashboard">
+                <div class="welcome-message">
+                    <h2>Welcome back!</h2>
+                    <p>Manage your assets and track transactions from your dashboard.</p>
+                </div>
+
+                <!-- Dashboard Statistics -->
+                <div class="dashboard-grid" id="dashboardStats">
+                    <!-- Stats will be loaded here by JavaScript -->
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="dashboard-actions">
+                    <h3>Quick Actions</h3>
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <a href="scan.html" class="btn btn-primary">Scan Asset</a>
+                        <a href="add-asset.html" class="btn btn-success">Add New Asset</a>
+                        <a href="reports.html" class="btn btn-secondary">View Reports</a>
+                        <a href="users.html" class="btn btn-secondary">Manage Users</a>
+                    </div>
+                </div>
+
+                <!-- Recent Transactions -->
+                <div class="dashboard-card">
+                    <h3>Recent Transactions</h3>
+                    <div class="table-container" id="recentTransactions">
+                        <!-- Transactions will be loaded here by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Asset List -->
+                <div class="dashboard-card">
+                    <h3>Asset Inventory</h3>
+                    <div class="table-container" id="assetList">
+                        <!-- Assets will be loaded here by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2024 Asset Management System. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

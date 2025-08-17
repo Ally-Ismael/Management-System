@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scan Asset - Asset Management System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Asset Management System</h1>
+            <nav class="nav">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="login.html" class="nav-link">Login</a>
+                <a href="register.html" class="nav-link">Register</a>
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+                <button id="logoutBtn" class="btn btn-danger" style="margin-left: auto;">Logout</button>
+            </nav>
+        </header>
+
+        <main class="main-content">
+            <div class="form-container">
+                <h2 class="form-title">Scan Asset</h2>
+                
+                <form id="scanForm">
+                    <div class="form-group">
+                        <label for="assetNumber">Asset Number</label>
+                        <input type="text" id="assetNumber" name="assetNumber" required placeholder="Enter asset number">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="action">Action</label>
+                        <select id="action" name="action" required>
+                            <option value="in">Check In</option>
+                            <option value="out">Check Out</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="location">Location (Optional)</label>
+                        <input type="text" id="location" name="location" placeholder="Enter location">
+                    </div>
+                    
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Scan Asset</button>
+                        <a href="dashboard.html" class="btn btn-secondary">Back to Dashboard</a>
+                    </div>
+                </form>
+
+                <!-- Asset Information Display -->
+                <div id="assetInfo" class="dashboard-card" style="margin-top: 2rem; display: none;">
+                    <h3>Asset Information</h3>
+                    <div id="assetDetails">
+                        <!-- Asset details will be displayed here -->
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2024 Asset Management System. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        // Additional functionality for scan page
+        document.getElementById('assetNumber').addEventListener('blur', function() {
+            const assetNumber = this.value;
+            if (assetNumber) {
+                displayAssetInfo(assetNumber);
+            }
+        });
+
+        function displayAssetInfo(assetNumber) {
+            const assets = JSON.parse(localStorage.getItem('assets')) || [];
+            const asset = assets.find(a => a.assetNumber === assetNumber);
+            
+            const assetInfo = document.getElementById('assetInfo');
+            const assetDetails = document.getElementById('assetDetails');
+            
+            if (asset) {
+                assetDetails.innerHTML = `
+                    <p><strong>Asset Number:</strong> ${asset.assetNumber}</p>
+                    <p><strong>Type:</strong> ${asset.type}</p>
+                    <p><strong>Description:</strong> ${asset.description}</p>
+                    <p><strong>Status:</strong> <span class="badge ${asset.status === 'available' ? 'success' : 'warning'}">${asset.status}</span></p>
+                    <p><strong>Location:</strong> ${asset.location}</p>
+                `;
+                assetInfo.style.display = 'block';
+            } else {
+                assetInfo.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
