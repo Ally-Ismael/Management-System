@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports - Asset Management System</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .report-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        .report-filters {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        .filter-row {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: end;
+        }
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        .export-buttons {
+            margin-top: 1rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Asset Management System</h1>
+            <nav class="nav">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="login.html" class="nav-link">Login</a>
+                <a href="register.html" class="nav-link">Register</a>
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+                <button id="logoutBtn" class="btn btn-danger" style="margin-left: auto;">Logout</button>
+            </nav>
+        </header>
+
+        <main class="main-content">
+            <h2>Reports & Analytics</h2>
+
+            <!-- Report Filters -->
+            <div class="report-filters">
+                <h3>Filter Reports</h3>
+                <div class="filter-row">
+                    <div class="filter-group">
+                        <label for="dateFrom">Date From</label>
+                        <input type="date" id="dateFrom" name="dateFrom">
+                    </div>
+                    <div class="filter-group">
+                        <label for="dateTo">Date To</label>
+                        <input type="date" id="dateTo" name="dateTo">
+                    </div>
+                    <div class="filter-group">
+                        <label for="assetType">Asset Type</label>
+                        <select id="assetType" name="assetType">
+                            <option value="">All Types</option>
+                            <option value="laptop">Laptop</option>
+                            <option value="desktop">Desktop</option>
+                            <option value="monitor">Monitor</option>
+                            <option value="printer">Printer</option>
+                            <option value="phone">Phone</option>
+                            <option value="tablet">Tablet</option>
+                            <option value="car">Car</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <button onclick="generateReports()" class="btn btn-primary">Generate Report</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Asset Summary Report -->
+            <div class="report-card">
+                <h3>Asset Summary Report</h3>
+                <div class="dashboard-grid" id="assetSummary">
+                    <!-- Asset summary will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Transaction Report -->
+            <div class="report-card">
+                <h3>Transaction Report</h3>
+                <div class="table-container" id="transactionReport">
+                    <!-- Transaction report will be loaded here -->
+                </div>
+                <div class="export-buttons">
+                    <button onclick="exportToCSV()" class="btn btn-secondary">Export to CSV</button>
+                    <button onclick="exportToPDF()" class="btn btn-secondary">Export to PDF</button>
+                </div>
+            </div>
+
+            <!-- Asset Status Report -->
+            <div class="report-card">
+                <h3>Asset Status Report</h3>
+                <div class="table-container" id="assetStatusReport">
+                    <!-- Asset status report will be loaded here -->
+                </div>
+            </div>
+
+            <!-- User Activity Report -->
+            <div class="report-card">
+                <h3>User Activity Report</h3>
+                <div class="table-container" id="userActivityReport">
+                    <!-- User activity report will be loaded here -->
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2024 Asset Management System. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        // Reports functionality
+        function generateReports() {
+            const dateFrom = document.getElementById('dateFrom').value;
+            const dateTo = document.getElementById('dateTo').value;
+            const assetType = document.getElementById('assetType').value;
+
+            generateAssetSummary();
+            generateTransactionReport(dateFrom, dateTo, assetType);
+            generateAssetStatusReport();
+            generateUserActivityReport(dateFrom, dateTo);
+        }
+
+        function generateAssetSummary() {
+            const assets = JSON.parse(localStorage.getItem('assets')) || [];
+            const transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+
+            const totalAssets = assets.length;
+            const availableAssets = assets.filter(a => a.status === 'available').length;
+            const checkedOutAssets = assets.filter(a => a.status === 'checked_out').length;
+            const totalTransactions = transactions.length;
+
+            const summaryHTML = `
+                <div class="dashboard-card">
+                    <h4>Total Assets</h4>
+                    <p class="stat-number">${totalAssets}</p>
+                </div>
+                <div class="dashboard-card">
+                    <h4>Available</h4>
+                    <p class="stat-number">${availableAssets}</p>
+                </div>
+                <div class="dashboard-card">
+                    <h4>Checked Out</h4>
+                    <p class="stat-number">${checkedOutAssets}</p>
+                </div>
+                <div class="dashboard-card">
+                    <h4>Total Transactions</h4>
+                    <p class="stat-number">${totalTransactions}</p>
+                </div>
+            `;
+
+            document.getElementById('assetSummary').innerHTML = summaryHTML;
+        }
+
+        function generateTransactionReport(dateFrom, dateTo, assetType) {
+            let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+            const assets = JSON.parse(localStorage.getItem('assets')) || [];
+
+            // Filter by date range
+            if (dateFrom) {
+                transactions = transactions.filter(t => new Date(t.timestamp) >= new Date(dateFrom));
+            }
+            if (dateTo) {
+                transactions = transactions.filter(t => new Date(t.timestamp) <= new Date(dateTo));
+            }
+
+            // Filter by asset type
+            if (assetType) {
+                const assetIds = assets.filter(a => a.type === assetType).map(a => a.id);
+                transactions = transactions.filter(t => assetIds.includes(t.assetId));
+            }
+
+            if (transactions.length === 0) {
+                document.getElementById('transactionReport').innerHTML = '<p>No transactions found for the selected criteria.</p>';
+                return;
+            }
+
+            const tableHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Asset</th>
+                            <th>Action</th>
+                            <th>User</th>
+                            <th>Location</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${transactions.map(t => `
+                            <tr>
+                                <td>${new Date(t.timestamp).toLocaleDateString()}</td>
+                                <td>${t.assetNumber}</td>
+                                <td><span class="badge ${t.action === 'in' ? 'success' : 'warning'}">${t.action.toUpperCase()}</span></td>
+                                <td>${t.userName}</td>
+                                <td>${t.location}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+
+            document.getElementById('transactionReport').innerHTML = tableHTML;
+        }
+
+        function generateAssetStatusReport() {
+            const assets = JSON.parse(localStorage.getItem('assets')) || [];
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+
+            if (assets.length === 0) {
+                document.getElementById('assetStatusReport').innerHTML = '<p>No assets found.</p>';
+                return;
+            }
+
+            const tableHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Asset Number</th>
+                            <th>Type</th>
+                            <th>Status</th>
+                            <th>Assigned To</th>
+                            <th>Location</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${assets.map(asset => {
+                            const assignedUser = users.find(u => u.id === asset.assignedTo);
+                            return `
+                                <tr>
+                                    <td>${asset.assetNumber}</td>
+                                    <td>${asset.type}</td>
+                                    <td><span class="badge ${asset.status === 'available' ? 'success' : 'warning'}">${asset.status}</span></td>
+                                    <td>${assignedUser ? `${assignedUser.firstname} ${assignedUser.surname}` : 'Not Assigned'}</td>
+                                    <td>${asset.location}</td>
+                                </tr>
+                            `;
+                        }).join('')}
+                    </tbody>
+                </table>
+            `;
+
+            document.getElementById('assetStatusReport').innerHTML = tableHTML;
+        }
+
+        function generateUserActivityReport(dateFrom, dateTo) {
+            const transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+
+            let filteredTransactions = transactions;
+
+            // Filter by date range
+            if (dateFrom) {
+                filteredTransactions = filteredTransactions.filter(t => new Date(t.timestamp) >= new Date(dateFrom));
+            }
+            if (dateTo) {
+                filteredTransactions = filteredTransactions.filter(t => new Date(t.timestamp) <= new Date(dateTo));
+            }
+
+            // Group by user
+            const userActivity = {};
+            filteredTransactions.forEach(t => {
+                if (!userActivity[t.userName]) {
+                    userActivity[t.userName] = { checkIns: 0, checkOuts: 0 };
+                }
+                if (t.action === 'in') {
+                    userActivity[t.userName].checkIns++;
+                } else {
+                    userActivity[t.userName].checkOuts++;
+                }
+            });
+
+            if (Object.keys(userActivity).length === 0) {
+                document.getElementById('userActivityReport').innerHTML = '<p>No user activity found for the selected criteria.</p>';
+                return;
+            }
+
+            const tableHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Check Ins</th>
+                            <th>Check Outs</th>
+                            <th>Total Activity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${Object.entries(userActivity).map(([userName, activity]) => `
+                            <tr>
+                                <td>${userName}</td>
+                                <td>${activity.checkIns}</td>
+                                <td>${activity.checkOuts}</td>
+                                <td>${activity.checkIns + activity.checkOuts}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+
+            document.getElementById('userActivityReport').innerHTML = tableHTML;
+        }
+
+        function exportToCSV() {
+            const table = document.querySelector('#transactionReport table');
+            if (!table) return;
+
+            let csv = [];
+            const rows = table.querySelectorAll('tr');
+            
+            for (let i = 0; i < rows.length; i++) {
+                const row = [], cols = rows[i].querySelectorAll('td, th');
+                
+                for (let j = 0; j < cols.length; j++) {
+                    let text = cols[j].innerText.replace(/"/g, '""');
+                    row.push('"' + text + '"');
+                }
+                
+                csv.push(row.join(','));
+            }
+
+            const csvContent = csv.join('\n');
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'transaction_report.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        function exportToPDF() {
+            alert('PDF export functionality would be implemented here. For now, you can use the browser\'s print function (Ctrl+P) to save as PDF.');
+        }
+
+        // Generate initial reports when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            generateReports();
+        });
+    </script>
+</body>
+</html>

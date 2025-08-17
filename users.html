@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management - Asset Management System</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .user-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        .user-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .btn-sm {
+            padding: 4px 8px;
+            font-size: 0.75rem;
+        }
+        .search-box {
+            margin-bottom: 1rem;
+        }
+        .search-box input {
+            width: 100%;
+            max-width: 300px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Asset Management System</h1>
+            <nav class="nav">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="login.html" class="nav-link">Login</a>
+                <a href="register.html" class="nav-link">Register</a>
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+                <button id="logoutBtn" class="btn btn-danger" style="margin-left: auto;">Logout</button>
+            </nav>
+        </header>
+
+        <main class="main-content">
+            <h2>User Management</h2>
+
+            <!-- Search and Filter -->
+            <div class="user-card">
+                <h3>Search Users</h3>
+                <div class="search-box">
+                    <input type="text" id="userSearch" placeholder="Search by name, username, or email..." onkeyup="filterUsers()">
+                </div>
+            </div>
+
+            <!-- User Statistics -->
+            <div class="dashboard-grid" id="userStats">
+                <!-- User statistics will be loaded here -->
+            </div>
+
+            <!-- Users List -->
+            <div class="user-card">
+                <h3>All Users</h3>
+                <div class="table-container" id="usersList">
+                    <!-- Users will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Add User Form -->
+            <div class="user-card">
+                <h3>Add New User</h3>
+                <form id="addUserForm">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                        <div class="form-group">
+                            <label for="newUsername">Username</label>
+                            <input type="text" id="newUsername" name="username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="newFirstname">First Name</label>
+                            <input type="text" id="newFirstname" name="firstname" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="newSurname">Surname</label>
+                            <input type="text" id="newSurname" name="surname" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="newEmail">Email</label>
+                            <input type="email" id="newEmail" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="newEmployeeNo">Employee Number</label>
+                            <input type="number" id="newEmployeeNo" name="employeeNo" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="newRole">Role</label>
+                            <select id="newRole" name="role" required>
+                                <option value="user">User</option>
+                                <option value="admin">Admin</option>
+                                <option value="manager">Manager</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="newPassword">Password</label>
+                            <input type="password" id="newPassword" name="password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="newConfirmPassword">Confirm Password</label>
+                            <input type="password" id="newConfirmPassword" name="confirmPassword" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Add User</button>
+                    </div>
+                </form>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2024 Asset Management System. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        // User management functionality
+        function loadUsers() {
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+            const assets = JSON.parse(localStorage.getItem('assets')) || [];
+
+            // Generate user statistics
+            const totalUsers = users.length;
+            const activeUsers = users.filter(u => u.role !== 'inactive').length;
+            const adminUsers = users.filter(u => u.role === 'admin').length;
+            const totalUserActivity = transactions.length;
+
+            const statsHTML = `
+                <div class="dashboard-card">
+                    <h4>Total Users</h4>
+                    <p class="stat-number">${totalUsers}</p>
+                </div>
+                <div class="dashboard-card">
+                    <h4>Active Users</h4>
+                    <p class="stat-number">${activeUsers}</p>
+                </div>
+                <div class="dashboard-card">
+                    <h4>Admin Users</h4>
+                    <p class="stat-number">${adminUsers}</p>
+                </div>
+                <div class="dashboard-card">
+                    <h4>Total Activity</h4>
+                    <p class="stat-number">${totalUserActivity}</p>
+                </div>
+            `;
+
+            document.getElementById('userStats').innerHTML = statsHTML;
+
+            // Generate users list
+            if (users.length === 0) {
+                document.getElementById('usersList').innerHTML = '<p>No users found.</p>';
+                return;
+            }
+
+            const tableHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Employee No</th>
+                            <th>Created</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${users.map(user => {
+                            const userTransactions = transactions.filter(t => t.userId === user.id).length;
+                            const userAssets = assets.filter(a => a.assignedTo === user.id).length;
+                            
+                            return `
+                                <tr>
+                                    <td>${user.firstname} ${user.surname}</td>
+                                    <td>${user.username}</td>
+                                    <td>${user.email}</td>
+                                    <td><span class="badge ${user.role === 'admin' ? 'warning' : 'success'}">${user.role}</span></td>
+                                    <td>${user.employeeNo}</td>
+                                    <td>${new Date(user.createdAt).toLocaleDateString()}</td>
+                                    <td>
+                                        <div class="user-actions">
+                                            <button onclick="viewUserDetails(${user.id})" class="btn btn-primary btn-sm">View</button>
+                                            <button onclick="editUser(${user.id})" class="btn btn-secondary btn-sm">Edit</button>
+                                            <button onclick="deleteUser(${user.id})" class="btn btn-danger btn-sm">Delete</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            `;
+                        }).join('')}
+                    </tbody>
+                </table>
+            `;
+
+            document.getElementById('usersList').innerHTML = tableHTML;
+        }
+
+        function filterUsers() {
+            const searchTerm = document.getElementById('userSearch').value.toLowerCase();
+            const rows = document.querySelectorAll('#usersList tbody tr');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm) ? '' : 'none';
+            });
+        }
+
+        function viewUserDetails(userId) {
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+            const assets = JSON.parse(localStorage.getItem('assets')) || [];
+            
+            const user = users.find(u => u.id === userId);
+            if (!user) return;
+
+            const userTransactions = transactions.filter(t => t.userId === userId);
+            const userAssets = assets.filter(a => a.assignedTo === userId);
+
+            const detailsHTML = `
+                <h4>User Details</h4>
+                <p><strong>Name:</strong> ${user.firstname} ${user.surname}</p>
+                <p><strong>Username:</strong> ${user.username}</p>
+                <p><strong>Email:</strong> ${user.email}</p>
+                <p><strong>Employee No:</strong> ${user.employeeNo}</p>
+                <p><strong>Role:</strong> ${user.role}</p>
+                <p><strong>Created:</strong> ${new Date(user.createdAt).toLocaleDateString()}</p>
+                <p><strong>Total Transactions:</strong> ${userTransactions.length}</p>
+                <p><strong>Assigned Assets:</strong> ${userAssets.length}</p>
+            `;
+
+            alert(detailsHTML.replace(/<[^>]*>/g, ''));
+        }
+
+        function editUser(userId) {
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const user = users.find(u => u.id === userId);
+            if (!user) return;
+
+            // For simplicity, we'll use prompts. In a real app, you'd have a modal form
+            const newRole = prompt('Enter new role (user/admin/manager):', user.role);
+            if (newRole && ['user', 'admin', 'manager'].includes(newRole)) {
+                user.role = newRole;
+                localStorage.setItem('users', JSON.stringify(users));
+                loadUsers();
+                alert('User updated successfully!');
+            }
+        }
+
+        function deleteUser(userId) {
+            if (!confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
+                return;
+            }
+
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const updatedUsers = users.filter(u => u.id !== userId);
+            localStorage.setItem('users', JSON.stringify(updatedUsers));
+            loadUsers();
+            alert('User deleted successfully!');
+        }
+
+        // Add user form handler
+        document.getElementById('addUserForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            
+            const userData = {
+                id: Date.now(),
+                username: formData.get('username'),
+                password: formData.get('password'),
+                confirmPassword: formData.get('confirmPassword'),
+                firstname: formData.get('firstname'),
+                surname: formData.get('surname'),
+                employeeNo: formData.get('employeeNo'),
+                email: formData.get('email'),
+                role: formData.get('role'),
+                createdAt: new Date().toISOString()
+            };
+
+            // Validation
+            if (userData.password !== userData.confirmPassword) {
+                alert('Passwords do not match!');
+                return;
+            }
+
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            if (users.find(user => user.username === userData.username)) {
+                alert('Username already exists!');
+                return;
+            }
+
+            // Hash password
+            userData.password = btoa(userData.password);
+            delete userData.confirmPassword;
+
+            users.push(userData);
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            e.target.reset();
+            loadUsers();
+            alert('User added successfully!');
+        });
+
+        // Load users when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUsers();
+        });
+    </script>
+</body>
+</html>

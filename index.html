@@ -1,23 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Management System (HTML/CSS/JS)</title>
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-	<link rel="stylesheet" href="assets/spa.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asset Management System</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-	<header class="topbar">
-		<div class="brand">NAMWATER Management</div>
-		<nav class="nav" id="nav"></nav>
-	</header>
-	<main id="app" class="app"></main>
-	<footer class="footer">
-		<div>HTML/CSS/JS SPA • Data stored in your browser (localStorage)</div>
-	</footer>
-	<script src="assets/spa.js"></script>
+    <div class="container">
+        <header class="header">
+            <h1>Asset Management System</h1>
+            <nav class="nav">
+                <a href="index.html" class="nav-link active">Home</a>
+                <a href="login.html" class="nav-link">Login</a>
+                <a href="register.html" class="nav-link">Register</a>
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+            </nav>
+        </header>
+
+        <main class="main-content">
+            <div class="welcome-section">
+                <h2>Welcome to Asset Management System</h2>
+                <p>Manage your company assets efficiently with our comprehensive tracking system.</p>
+                
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h3>Asset Tracking</h3>
+                        <p>Track laptops, cars, and other company assets</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Scan In/Out</h3>
+                        <p>Record asset check-ins and check-outs</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Reports</h3>
+                        <p>Generate detailed reports and analytics</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>User Management</h3>
+                        <p>Manage user accounts and permissions</p>
+                    </div>
+                </div>
+
+                <div class="cta-buttons">
+                    <a href="login.html" class="btn btn-primary">Login</a>
+                    <a href="register.html" class="btn btn-secondary">Register</a>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2024 Asset Management System. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
 </body>
 </html>
