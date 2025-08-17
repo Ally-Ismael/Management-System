@@ -1,79 +1,26 @@
 # Laptop & Car Gate Scan System (Management-System)
 
-A secure PHP MVC application for managing laptops and cars scanning in/out, IT inventory, user management (login/register, roles), reports, and a NamWater employee attendance register.
+A secure management system now available as a pure HTML/CSS/JS SPA (no PHP required) + Digital SAP Authorization System.
 
-## Features
-- Authentication: Login, registration (bcrypt), roles (admin, user), session hardening
-- CSRF protection for all forms, input validation, rate-limited login
-- Inventory: Laptops and Cars (CRUD)
-- Scanning: Laptop in/out, Car in/out
-- Reporting: Paginated views, CSV export
-- Attendance: NamWater employees register (check-in/out)
-- Security headers, prepared statements, basic MVC structure
+## Run (HTML/CSS/JS only)
+1. Open `index.html` in a browser (double-click) or serve statically:
+   - Python: `python3 -m http.server 8080`
+   - Node: `npx serve .` then open the printed URL
+2. Login with seeded admin: username `admin`, password `admin` (localStorage)
+3. Use the top navigation to access scanning and reports
+4. Open Digital SAP Authorization via the "SAP Forms" tab (or `SAP forms.html`)
 
-## Requirements
-- PHP 7.4+ (or 8.x)
-- MySQL 5.7+ / MariaDB 10.4+
-- Apache/Nginx (or PHP built-in server for dev)
+Data is stored locally in your browser (localStorage). Use the Reports page to export CSV.
 
-## Quick Start
-1. Create database and tables:
-   - Create database `iyaloo` in MySQL
-   - Run SQL at `sql/schema.sql`
+## Legacy PHP (optional)
+The PHP application under `public/` and `application/` can still run, but is not required for the SPA workflow. See previous instructions below.
 
-2. Configure DB credentials:
-   - Edit `application/config/constants.php` (DB_HOST, DB_USER, DB_PASS, DB_NAME)
+## Previous PHP Instructions (legacy)
+- Requirements: PHP 7.4+, MySQL 5.7+
+- DB: Create `iyaloo` and import `sql/schema.sql`
+- Config: `application/config/constants.php`
+- Serve: `php -S 127.0.0.1:8000 -t public`
 
-3. Serve the app:
-   - Apache: Point DocumentRoot to `public/`
-   - Nginx: Serve `public/` and route all to `index.php`
-   - PHP built-in: `php -S 127.0.0.1:8000 -t public`
-
-4. First login:
-   - Register a user via `/index.php?r=auth/register` (first user becomes admin)
-   - Or insert an admin into `users` table with role `admin`
-
-## Security Notes
-- Prepared statements via mysqli
-- CSRF tokens on all forms
-- Session hardening, login rate-limit
-- Security headers in every response
-
-## Structure
-```
-/application
-  /config
-  /controllers
-  /models
-  /views
-    /layouts
-    /partials
-  /assets
-    /css
-    /js
-  /lib
-    /helpers
-/public
-  index.php
-/sql
-  schema.sql
-```
-
-## Environment Variables (optional)
-You can override config using environment variables:
-- `APP_BASE_URL`
-- `DB_HOST`, `DB_USER`, `DB_PASS`, `DB_NAME`
-- `ALLOW_SELF_REGISTRATION` ("1"/"0")
-
-## Exports
-- Reports CSV endpoints under `reports` (links in UI)
-
-## Backups
-- Use `mysqldump iyaloo > backup.sql` regularly. Consider scheduling.
-
-## Testing
-- Manual E2E via UI.
-- For PHPUnit, add composer and tests directory (not included by default).
-
-## License
-Proprietary/internal use.
+## Notes
+- This SPA keeps state only in localStorage. For multi-user/server-backed workflows, integrate an API.
+- Digital SAP Authorization System remains in `SAP forms.html` and works alongside the SPA.

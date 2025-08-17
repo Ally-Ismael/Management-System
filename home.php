@@ -121,12 +121,13 @@ if (!isLoggedIn()) {
         </script>
         <br><br>
         <div class="links">
-		<a href="index.php" target="_self">Scan Company Laptop</a><br><br>
-		<a href="inde.php" target="_self">Scan Private Laptop</a><br><br>
-		<a href="pricr.php" target="_self">Scan Private Car</a><br><br>
-		 <a href="scancar.php" target="_self">Scan Company Car</a><br><br>
-		 <a href="private.php" target="_self">Add Private Laptop</a><br><br>
-		 <a href="addpcar.php" target="_self">Add private Car</a><br><br>
+			<a href="index.php" target="_self">Scan Company Laptop</a><br><br>
+			<a href="inde.php" target="_self">Scan Private Laptop</a><br><br>
+			<a href="pricr.php" target="_self">Scan Private Car</a><br><br>
+			 <a href="scancar.php" target="_self">Scan Company Car</a><br><br>
+			 <a href="private.php" target="_self">Add Private Laptop</a><br><br>
+			 <a href="addpcar.php" target="_self">Add private Car</a><br><br>
+			 <a href="SAP forms.html" target="_self">Digital SAP Authorization System</a><br><br>
             <a href="homep.php?logout='1'">Logout</a><br>
         </div>
         <div class="content">
