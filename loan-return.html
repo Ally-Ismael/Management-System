@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Loan / Return - Asset Management System</title>
+	<link rel="stylesheet" href="styles.css">
+	<style>
+		.form-container { max-width: 900px; }
+		.section { margin-bottom: 2rem; }
+	</style>
+</head>
+<body>
+	<div class="container">
+		<header class="header">
+			<h1>Asset Management System</h1>
+			<nav class="nav">
+				<a href="index.html" class="nav-link">Home</a>
+				<a href="login.html" class="nav-link">Login</a>
+				<a href="dashboard.html" class="nav-link">Dashboard</a>
+				<a href="javascript:history.back()" class="btn btn-secondary" style="margin-left:auto">Back</a>
+				<button id="logoutBtn" class="btn btn-danger">Logout</button>
+			</nav>
+		</header>
+
+		<main class="main-content">
+			<div class="form-container">
+				<h2 class="form-title">Loan / Borrow Asset</h2>
+				<form id="loanAssetForm" class="section">
+					<div class="grid-auto-fit">
+						<div class="form-group">
+							<label for="deviceName">Device Name</label>
+							<input type="text" id="deviceName" name="deviceName" required>
+						</div>
+						<div class="form-group">
+							<label for="assetNumber">Asset NUMBER/NWC</label>
+							<input type="text" id="assetNumber" name="assetNumber" required placeholder="NWC12345">
+						</div>
+						<div class="form-group">
+							<label for="serialNumber">Serial Number</label>
+							<input type="text" id="serialNumber" name="serialNumber">
+						</div>
+						<div class="form-group">
+							<label for="location">Location</label>
+							<input type="text" id="location" name="location">
+						</div>
+						<div class="form-group">
+							<label for="condition">Condition</label>
+							<input type="text" id="condition" name="condition">
+						</div>
+						<div class="form-group">
+							<label for="issuedToSearch">Issued To (AD Search)</label>
+							<input type="text" id="issuedToSearch" placeholder="Type a name or email to search AD">
+							<datalist id="issuedToResults"></datalist>
+							<input type="hidden" id="issuedTo" name="issuedTo">
+						</div>
+						<div class="form-group">
+							<label for="reason">Reason/Why</label>
+							<input type="text" id="reason" name="reason">
+						</div>
+						<div class="form-group">
+							<label for="issuedAt">When was it Issued</label>
+							<input type="datetime-local" id="issuedAt" name="issuedAt">
+						</div>
+						<div class="form-group">
+							<label for="until">Until</label>
+							<input type="datetime-local" id="until" name="until">
+						</div>
+					</div>
+					<div class="form-group">
+						<button type="submit" class="btn btn-primary">Record Loan</button>
+					</div>
+				</form>
+
+				<h2 class="form-title">Return Asset</h2>
+				<form id="returnAssetForm" class="section">
+					<div class="grid-auto-fit">
+						<div class="form-group">
+							<label for="returnAssetNumber">Asset NUMBER/NWC</label>
+							<input type="text" id="returnAssetNumber" name="assetNumber" required placeholder="NWC12345">
+						</div>
+						<div class="form-group">
+							<label for="returnedAt">When was it returned</label>
+							<input type="datetime-local" id="returnedAt" name="returnedAt">
+						</div>
+						<div class="form-group">
+							<label for="returnCondition">Condition</label>
+							<input type="text" id="returnCondition" name="returnCondition">
+						</div>
+					</div>
+					<div class="form-group">
+						<button type="submit" class="btn btn-primary">Record Return</button>
+						<a href="dashboard.html" class="btn btn-secondary">Back to Dashboard</a>
+					</div>
+				</form>
+			</div>
+		</main>
+
+		<footer class="footer">
+			<p>&copy; 2024 Asset Management System. All rights reserved.</p>
+		</footer>
+	</div>
+
+	<script src="app.js"></script>
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			const searchInput = document.getElementById('issuedToSearch');
+			const resultsList = document.getElementById('issuedToResults');
+			const issuedTo = document.getElementById('issuedTo');
+
+			function updateResults() {
+				const term = searchInput.value.trim();
+				resultsList.innerHTML = '';
+				if (!term) return;
+				const results = window.app?.searchActiveDirectory(term) || [];
+				results.forEach(r => {
+					const option = document.createElement('option');
+					option.value = `${r.name} <${r.email}>`;
+					resultsList.appendChild(option);
+				});
+				searchInput.setAttribute('list', 'issuedToResults');
+			}
+
+			searchInput.addEventListener('input', updateResults);
+			searchInput.addEventListener('change', function() { issuedTo.value = this.value; });
+		});
+	</script>
+</body>
+</html>

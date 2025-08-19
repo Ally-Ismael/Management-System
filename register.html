@@ -30,81 +30,18 @@
             <nav class="nav">
                 <a href="index.html" class="nav-link">Home</a>
                 <a href="login.html" class="nav-link">Login</a>
-                <a href="register.html" class="nav-link active">Register</a>
                 <a href="dashboard.html" class="nav-link">Dashboard</a>
             </nav>
         </header>
 
         <main class="main-content">
             <div class="form-container">
-                <h2 class="form-title">Register</h2>
+                <h2 class="form-title">Registration Disabled</h2>
                 
-                <form id="registerForm">
-                    <div class="form-group">
-                        <label for="username">Username</label>
-                        <input type="text" id="username" name="username" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="surname">Surname</label>
-                        <input type="text" id="surname" name="surname" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="firstname">First Name</label>
-                        <input type="text" id="firstname" name="firstname" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="employeeNo">Employee Number</label>
-                        <input type="number" id="employeeNo" name="employeeNo" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="gender">Gender</label>
-                        <select id="gender" name="gender" required>
-                            <option value="">Select Gender</option>
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="phoneNumber">Phone Number</label>
-                        <input type="tel" id="phoneNumber" name="phoneNumber" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="password">Password</label>
-                        <div class="toggle-password">
-                            <input type="password" id="password" name="password" required>
-                            <span class="eye" onclick="togglePasswordVisibility('password')">👁</span>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="confirmPassword">Confirm Password</label>
-                        <div class="toggle-password">
-                            <input type="password" id="confirmPassword" name="confirmPassword" required>
-                            <span class="eye" onclick="togglePasswordVisibility('confirmPassword')">👁</span>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-primary">Register</button>
-                        <a href="index.html" class="btn btn-secondary">Back</a>
-                    </div>
-                    
-                    <div class="text-center">
-                        <p>Already have an account? <a href="login.html" class="link-primary">Login</a></p>
-                    </div>
-                </form>
+                <div class="user-card">
+                    <p>Self-registration has been disabled. Please use your assigned credentials to login.</p>
+                    <a href="login.html" class="btn btn-primary">Go to Login</a>
+                </div>
             </div>
         </main>
 

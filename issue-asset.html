@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Issue Asset - Asset Management System</title>
+	<link rel="stylesheet" href="styles.css">
+	<style>
+		.form-container { max-width: 700px; }
+	</style>
+</head>
+<body>
+	<div class="container">
+		<header class="header">
+			<h1>Asset Management System</h1>
+			<nav class="nav">
+				<a href="index.html" class="nav-link">Home</a>
+				<a href="login.html" class="nav-link">Login</a>
+				<a href="dashboard.html" class="nav-link">Dashboard</a>
+				<a href="javascript:history.back()" class="btn btn-secondary" style="margin-left:auto">Back</a>
+				<button id="logoutBtn" class="btn btn-danger">Logout</button>
+			</nav>
+		</header>
+
+		<main class="main-content">
+			<div class="form-container">
+				<h2 class="form-title">Issue Asset to User</h2>
+				<form id="issueAssetForm">
+					<div class="grid-auto-fit">
+						<div class="form-group">
+							<label for="assetNumber">Asset Number</label>
+							<input type="text" id="assetNumber" name="assetNumber" required placeholder="NWC12345">
+						</div>
+						<div class="form-group">
+							<label for="location">Location</label>
+							<input type="text" id="location" name="location" placeholder="Enter location">
+						</div>
+						<div class="form-group">
+							<label for="condition">Condition</label>
+							<input type="text" id="condition" name="condition" placeholder="Good / Fair / ...">
+						</div>
+						<div class="form-group">
+							<label for="reason">Reason/Why</label>
+							<input type="text" id="reason" name="reason" placeholder="Reason for issuing">
+						</div>
+						<div class="form-group">
+							<label for="issuedAt">Issued At</label>
+							<input type="datetime-local" id="issuedAt" name="issuedAt">
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="issuedToSearch">Issued To (AD Search)</label>
+						<input type="text" id="issuedToSearch" placeholder="Type a name or email to search AD">
+						<datalist id="issuedToResults"></datalist>
+						<input type="hidden" id="issuedTo" name="issuedTo">
+						<small>Select from the AD results</small>
+					</div>
+
+					<div class="form-group">
+						<button type="submit" class="btn btn-primary">Issue Asset</button>
+						<a href="dashboard.html" class="btn btn-secondary">Back to Dashboard</a>
+					</div>
+				</form>
+			</div>
+		</main>
+
+		<footer class="footer">
+			<p>&copy; 2024 Asset Management System. All rights reserved.</p>
+		</footer>
+	</div>
+
+	<script src="app.js"></script>
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			const searchInput = document.getElementById('issuedToSearch');
+			const resultsList = document.getElementById('issuedToResults');
+			const issuedTo = document.getElementById('issuedTo');
+
+			function updateResults() {
+				const term = searchInput.value.trim();
+				resultsList.innerHTML = '';
+				if (!term) return;
+				const results = window.app?.searchActiveDirectory(term) || [];
+				results.forEach(r => {
+					const option = document.createElement('option');
+					option.value = `${r.name} <${r.email}>`;
+					resultsList.appendChild(option);
+				});
+				searchInput.setAttribute('list', 'issuedToResults');
+			}
+
+			searchInput.addEventListener('input', updateResults);
+			searchInput.addEventListener('change', function() { issuedTo.value = this.value; });
+		});
+	</script>
+</body>
+</html>

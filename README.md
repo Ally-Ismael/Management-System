@@ -5,28 +5,31 @@ A modern, responsive web application for managing company assets built with HTML
 ## Features
 
 ### 🔐 User Management
-- User registration and authentication
-- Role-based access control (User, Admin, Manager)
+- Pre-provisioned authentication (no self-registration)
+- Role-based access control (Admin)
 - User profile management
-- Password visibility toggle
+- Password change (self-service)
 
 ### 📦 Asset Management
 - Add, view, and manage company assets
 - Asset categorization (Laptop, Desktop, Monitor, Printer, Phone, Tablet, Car, etc.)
-- Asset status tracking (Available, Checked Out)
-- Asset assignment to users
+- Asset status tracking (Available, Checked Out, Issued, Loaned)
+- Asset assignment to users (with AD search UI)
 
 ### 📊 Scanning System
 - Check-in and check-out functionality
 - Real-time asset status updates
 - Location tracking
 - Transaction history
+- Scanner-friendly input (Enter submits)
 
 ### 📈 Reporting & Analytics
 - Asset summary reports
 - Transaction reports with date filtering
 - User activity reports
 - Asset status reports
+- Individual user and individual asset reports
+- System logs
 - Export functionality (CSV)
 
 ### 🎨 Modern UI/UX
@@ -54,10 +57,12 @@ A modern, responsive web application for managing company assets built with HTML
 3. Start using the application!
 
 ### First Time Setup
-1. Register a new user account
-2. Login with your credentials
-3. Add some assets to the system
-4. Start tracking asset check-ins and check-outs
+1. Login with one of the provisioned accounts:
+   - louwS@namwater.com.na / ICT12345678
+   - tjivikuaM@namwater.com.na / ICT87654321
+   - AssetmanagementAD / NamwaterassetM@654321
+2. Add some assets to the system
+3. Start tracking asset check-ins and check-outs
 
 ## File Structure
 
@@ -65,15 +70,16 @@ A modern, responsive web application for managing company assets built with HTML
 asset-management-system/
 ├── index.html              # Home page
 ├── login.html              # Login page
-├── register.html           # Registration page
 ├── dashboard.html          # Main dashboard
-├── scan.html              # Asset scanning page
-├── add-asset.html         # Add new assets
-├── reports.html           # Reports and analytics
-├── users.html             # User management
-├── styles.css             # Main stylesheet
-├── app.js                 # Main JavaScript application
-└── README.md              # This file
+├── scan.html               # Asset scanning page
+├── add-asset.html          # Add new assets
+├── issue-asset.html        # Issue asset to user
+├── loan-return.html        # Loan and return assets
+├── reports.html            # Reports and analytics
+├── users.html              # User management (legacy)
+├── styles.css              # Main stylesheet
+├── app.js                  # Main JavaScript application
+└── README.md               # This file
 ```
 
 ## Usage Guide
@@ -123,16 +129,7 @@ Edit the asset type options in `add-asset.html` and `reports.html`:
 ```
 
 ### Modifying Styles
-All styling is in `styles.css`. The application uses CSS custom properties for easy theming:
-
-```css
-:root {
-    --primary-color: #667eea;
-    --secondary-color: #764ba2;
-    --success-color: #27ae60;
-    --danger-color: #e74c3c;
-}
-```
+All styling is in `styles.css`.
 
 ### Adding New Features
 The main application logic is in `app.js`. The `AssetManagementSystem` class contains all the core functionality.
@@ -150,9 +147,9 @@ If you encounter JavaScript errors, check the browser console (F12) for detailed
 
 ## Future Enhancements
 
-- [ ] Database integration (MySQL, PostgreSQL)
+- [ ] Real backend with database and AD (LDAP) integration
 - [ ] Real-time notifications
-- [ ] Barcode/QR code scanning
+- [ ] Barcode/QR code scanning via WebUSB / native bridge
 - [ ] Mobile app version
 - [ ] Advanced reporting with charts
 - [ ] Email notifications
