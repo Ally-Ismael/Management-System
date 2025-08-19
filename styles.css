@@ -360,3 +360,56 @@ tr:hover {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+/* Utility helpers (no inline styles) */
+.ml-auto {
+    margin-left: auto;
+}
+
+.ml-10 {
+    margin-left: 10px;
+}
+
+.mt-10 {
+    margin-top: 10px;
+}
+
+.mt-2x {
+    margin-top: 2rem;
+}
+
+.link-primary {
+    color: #667eea;
+}
+
+.text-success {
+    color: #28a745;
+}
+
+.flex-gap-wrap {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.grid-auto-fit {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.logo {
+    object-fit: contain;
+}
+
+.h-50 {
+    height: 50px;
+}
+
+.h-80 {
+    height: 80px;
+}
+
+.align-center {
+    align-items: center;
+}
