@@ -49,7 +49,6 @@
             <nav class="nav">
                 <a href="index.html" class="nav-link">Home</a>
                 <a href="login.html" class="nav-link">Login</a>
-                <a href="register.html" class="nav-link">Register</a>
                 <a href="dashboard.html" class="nav-link active">Dashboard</a>
                 <button id="logoutBtn" class="btn btn-danger ml-auto">Logout</button>
             </nav>
@@ -58,7 +57,7 @@
         <main class="main-content">
             <div id="dashboard">
                 <div class="welcome-message">
-                    <h2>Welcome back!</h2>
+                    <h2>Welcome, <span id="welcomeName"></span>!</h2>
                     <p>Manage your assets and track transactions from your dashboard.</p>
                 </div>
 
@@ -74,7 +73,8 @@
                         <a href="scan.html" class="btn btn-primary">Scan Asset</a>
                         <a href="add-asset.html" class="btn btn-success">Add New Asset</a>
                         <a href="reports.html" class="btn btn-secondary">View Reports</a>
-                        <a href="users.html" class="btn btn-secondary">Manage Users</a>
+                        <a href="issue-asset.html" class="btn btn-secondary">Issue Asset</a>
+                        <a href="loan-return.html" class="btn btn-secondary">Loan/Return</a>
                     </div>
                 </div>
 
@@ -92,6 +92,28 @@
                     <div class="table-container" id="assetList">
                         <!-- Assets will be loaded here by JavaScript -->
                     </div>
+                </div>
+
+                <!-- Change Password -->
+                <div class="dashboard-card">
+                    <h3>Change Password</h3>
+                    <form id="changePasswordForm" class="grid-auto-fit">
+                        <div class="form-group">
+                            <label for="currentPassword">Current Password</label>
+                            <input type="password" id="currentPassword" name="currentPassword" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="newPassword">New Password</label>
+                            <input type="password" id="newPassword" name="newPassword" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirm New Password</label>
+                            <input type="password" id="confirmPassword" name="confirmPassword" required>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Update Password</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </main>

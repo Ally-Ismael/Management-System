@@ -13,7 +13,6 @@
             <nav class="nav">
                 <a href="index.html" class="nav-link">Home</a>
                 <a href="login.html" class="nav-link">Login</a>
-                <a href="register.html" class="nav-link">Register</a>
                 <a href="dashboard.html" class="nav-link">Dashboard</a>
                 <button id="logoutBtn" class="btn btn-danger ml-auto">Logout</button>
             </nav>
@@ -26,7 +25,7 @@
                 <form id="scanForm">
                     <div class="form-group">
                         <label for="assetNumber">Asset Number</label>
-                        <input type="text" id="assetNumber" name="assetNumber" required placeholder="Enter asset number">
+                        <input type="text" id="assetNumber" name="assetNumber" required placeholder="Scan or enter asset number" autofocus>
                     </div>
                     
                     <div class="form-group">
@@ -70,6 +69,14 @@
             const assetNumber = this.value;
             if (assetNumber) {
                 displayAssetInfo(assetNumber);
+            }
+        });
+
+        // Submit on Enter to support scanner suffix
+        document.getElementById('assetNumber').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                document.getElementById('scanForm').requestSubmit();
             }
         });
 
